@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-BOT_SCRIPT_PATH = os.getenv('api_token')
+BOT_SCRIPT_PATH = os.getenv('BOT_SCRIPT_PATH')
 
 def is_bot_running():
     try:
