@@ -3,7 +3,7 @@ import sys
 
 def run_migration():
     migrations = [
-       "migrations/create_table_chat.py",
+       "migrations/create_table.py",
     ]
 
     for migration in migrations:
