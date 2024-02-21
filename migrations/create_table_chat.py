@@ -5,13 +5,25 @@ database = databases.Database("sqlite:///db.sqlite")
 
 models = orm.ModelRegistry(database=database)
 
+class User(orm.Model):
+    tablename = "User"
+    registry = models
+    fields = {
+        "id": orm.Integer(primary_key=True),
+        "name": orm.String(max_length=100),
+        "username": orm.String(max_length=100),
+    }
 class Chat(orm.Model):
-    __tablename__ = "chats"
-    id = orm.Integer(primary_key=True)
+    tablename = "Chat"
+    registry = models
+    fields = {
+        "id": orm.Integer(primary_key=True),
+        "user_id": orm.ForeignKey(User),
+        "message": orm.String(max_length=255),
+    }
 
 async def main():
     await models.create_all()
 
-# Run the main function
 import asyncio
 asyncio.run(main())
