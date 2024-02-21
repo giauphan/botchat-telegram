@@ -1,4 +1,5 @@
-from migrations.create_table import User
+from migrations.create_table import users
 
-class UserModel(User):
+class UserModel(users):
     pass
+

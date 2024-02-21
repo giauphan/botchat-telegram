@@ -1,29 +1,45 @@
-import databases
-import orm
+from pymongo import MongoClient
+from pymongo.server_api import ServerApi
+from dotenv import load_dotenv
+import os
 
-database = databases.Database("sqlite:///db.sqlite")
+load_dotenv()
+# Connect to MongoDB
+uri = os.getenv('uri_mongodb')
+client = MongoClient(uri,server_api=ServerApi('1'))
 
-models = orm.ModelRegistry(database=database)
+# Select the database
+database = client["bot_telegram"]
 
-class User(orm.Model):
-    tablename = "User"
-    registry = models
-    fields = {
-        "id": orm.Integer(primary_key=True),
-        "name": orm.String(max_length=100),
-        "username": orm.String(max_length=100),
-    }
-class Chat(orm.Model):
-    tablename = "Chat"
-    registry = models
-    fields = {
-        "id": orm.Integer(primary_key=True),
-        "user_id": orm.ForeignKey(User),
-        "message": orm.String(max_length=255),
-    }
+# Define the User collection
+users = database["users"]
 
-async def main():
-    await models.create_all()
+# Define the Chat collection
+chats = database["chats"]
 
-import asyncio
-asyncio.run(main())
+def Chat():
+    return chats
+# Example usage
+def create_tb():
+    # Ping the MongoDB server
+    database.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+
+    # Create a new user
+    user_id = users.insert_one({
+        "name": "John Doe",
+        "username": "johndoe"
+    })
+
+    # Create a new chat
+    chat_id = chats.insert_one({
+        "user_id": user_id.inserted_id,
+        "message": "Hello, world!"
+    })
+
+    # Retrieve the chat
+    chat = chats.find_one({"_id": chat_id.inserted_id})
+    print(chat)
+
+if __name__ == "__main__":
+    create_tb()
