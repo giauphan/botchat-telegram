@@ -2,26 +2,30 @@ import telebot
 import os
 from dotenv import load_dotenv
 import logging
-import asyncio ,sys,re, unicodedata
-load_dotenv()
+import asyncio
+import sys
+import re
+import unicodedata
 
 from Model.Chat import ChatModel as Chat
 from Model.User import UserModel as User
 
+load_dotenv()
+
 # Configure logging
-logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(filename='log/bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 bot = telebot.TeleBot(os.getenv('api_token'))
 
 async def save_chat(message):
-    # try:
+    try:
         full_name = message.from_user.first_name + message.from_user.last_name
         user, created = await User.objects.get_or_create(username=slugify(full_name), defaults={'name': full_name})
         chat = await Chat.objects.create(user_id=user, message=message.text)
         log(message)
-    # except Exception as e:
-    #     logger.error(f"Error saving chat: {e}")
+    except Exception as e:
+        logger.error(f"Error saving chat: {e}")
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
@@ -59,11 +63,11 @@ else:
 
 @bot.message_handler(commands=['statistical'])
 def runStatistics(message):
-    loop.run_until_complete(send_statistics(message))
+    asyncio.run(send_statistics(message))
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
-    loop.run_until_complete(save_chat(message))
+    asyncio.run(save_chat(message))
     bot.reply_to(message, message.text)
 
 
@@ -73,4 +77,5 @@ def log(message):
     except Exception as e:
         logger.error(f"Error logging message: {e}")
 
-bot.infinity_polling()
+if __name__ == "__main__":
+    bot.infinity_polling()

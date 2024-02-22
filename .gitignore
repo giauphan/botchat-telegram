@@ -3,3 +3,4 @@
 db.sqlite
 __pycache__
 bot.log
+./bot.log
