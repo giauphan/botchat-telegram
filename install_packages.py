@@ -4,6 +4,7 @@ def install_packages():
     packages = [
         "telebot",  
         "python-dotenv",
+        "pytz"
     ]
 
     for package in packages:

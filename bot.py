@@ -21,13 +21,17 @@ bot = telebot.TeleBot(os.getenv('api_token'))
 async def save_chat(message):
     try:
         full_name = message.from_user.first_name + message.from_user.last_name
-        user, created = await User.objects.get_or_create(username=slugify(full_name), defaults={'name': full_name})
+        user,created  = await User.objects.get_or_create(username=slugify(full_name), defaults={'name': full_name})
         chat = await Chat.objects.create(user_id=user, message=message.text)
         log(message)
     except Exception as e:
         logger.error(f"Error saving chat: {e}")
-
-
+        
+@bot.message_handler(commands=['start', 'help'])
+def send_welcome(message):
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    keyboard.add('/statistical') 
+    bot.reply_to(message, "Howdy, how are you doing?", reply_markup=keyboard)
 
 async def  send_statistics(message):
     try:
@@ -49,7 +53,6 @@ def slugify(text):
     text = re.sub(r'[^\w\s-]', '', text).strip().lower()
     text = re.sub(r'[-\s]+', '_', text)
     return text
-
 
 try:
     loop = asyncio.get_running_loop()
