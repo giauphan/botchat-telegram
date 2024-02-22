@@ -52,14 +52,12 @@ def slugify(text):
     text = re.sub(r'[-\s]+', '_', text)
     return text
 
-if sys.version_info < (3,  10):
-    loop = asyncio.get_event_loop()
-else:
-    try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
+
+try:
+    loop = asyncio.get_running_loop()
+except RuntimeError:
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
 
 @bot.message_handler(commands=['statistical'])
 def runStatistics(message):
@@ -73,7 +71,8 @@ def echo_all(message):
 
 def log(message):
     try:
-        logger.info(f"Message from {message.from_user.first_name}: {message.text}")
+        te = sys.version_info
+        logger.info(f"Message from {message.from_user.first_name}: {message.text} {te}")
     except Exception as e:
         logger.error(f"Error logging message: {e}")
 
