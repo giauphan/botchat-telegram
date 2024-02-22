@@ -6,7 +6,7 @@ import asyncio
 import sys
 import re
 import unicodedata
-
+from migrations.create_table import checkConnect
 from Model.Chat import ChatModel as Chat
 from Model.User import UserModel as User
 
@@ -27,11 +27,9 @@ async def save_chat(message):
     except Exception as e:
         logger.error(f"Error saving chat: {e}")
 
-@bot.message_handler(commands=['start', 'help'])
-def send_welcome(message):
-    bot.reply_to(message, "Howdy, how are you doing?")
 
-async def send_statistics(message):
+
+async def  send_statistics(message):
     try:
         full_name = message.from_user.first_name + message.from_user.last_name
         user = await User.objects.filter(username=slugify(full_name)).first()
@@ -58,6 +56,15 @@ try:
 except RuntimeError:
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
+
+@bot.message_handler(commands=['start', 'help'])
+def send_welcome(message):
+    bot.reply_to(message, "Howdy, how are you doing?")
+
+@bot.message_handler(commands=['connectdb'])
+def send_welcome(message):
+    check = checkConnect()
+    bot.reply_to(message, f"Connect db: {check} ")
 
 @bot.message_handler(commands=['statistical'])
 def runStatistics(message):
