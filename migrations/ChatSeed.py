@@ -12,7 +12,7 @@ async def main():
     # await Chat.objects.create( user_id=user, message="Hello, World 3!")
     chat_objects  = await ChatModel.objects.all()
     for chat_obj in chat_objects :
-        print(chat_obj.user_id)
+        print(chat_obj.message)
 
 import asyncio
 
