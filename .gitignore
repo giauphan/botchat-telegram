@@ -2,3 +2,4 @@
 .env
 db.sqlite
 __pycache__
+bot.log
