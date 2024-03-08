@@ -6,7 +6,8 @@ def install_packages():
         "python-dotenv",
         "pytz",
         "databases",
-         "orm"
+         "orm",
+         "aiosqlite"
     ]
 
     for package in packages:
