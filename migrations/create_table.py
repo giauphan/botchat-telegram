@@ -17,6 +17,13 @@ def convert_to_vietnam_time(utc_time):
     formatted_time = vietnam_time.strftime('%Y-%m-%d %H:%M:%S')
     return formatted_time
 
+def convert_to_utc(utc_time):
+    utc_timezone = pytz.timezone('UTC')
+    vietnam_timezone = pytz.timezone('Asia/Ho_Chi_Minh')
+    vietnam_time  = utc_time.replace(tzinfo=vietnam_timezone)
+    utc_time = vietnam_time.astimezone(utc_timezone)
+    return utc_time
+
 class User(orm.Model):
     tablename = "User"
     registry = models
@@ -33,6 +40,15 @@ class Chat(orm.Model):
         "id": orm.Integer(primary_key=True),
         "user_id": orm.ForeignKey(User),
         "message": orm.Text(),
+        "create_at":orm.DateTime(default=utc_now)
+    }
+class Spending(orm.Model):
+    tablename = "spending"
+    registry = models
+    fields = {
+        "id": orm.Integer(primary_key=True),
+        "user_id": orm.ForeignKey(User),
+        "money": orm.Float(),
         "create_at":orm.DateTime(default=utc_now)
     }
 

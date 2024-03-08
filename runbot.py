@@ -21,7 +21,7 @@ def start_bot():
 
 def restart_bot():
     stop_bot()
-    time.sleep(2)  # Wait for the bot to stop
+    time.sleep(2) 
     start_bot()
 
 def stop_bot():
