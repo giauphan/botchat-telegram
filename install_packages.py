@@ -5,7 +5,8 @@ def install_packages():
         "telebot",  
         "python-dotenv",
         "pytz",
-        "databases"
+        "databases",
+         "orm"
     ]
 
     for package in packages:
