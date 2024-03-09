@@ -91,7 +91,7 @@ async def save_spending(message):
         logger.error(f"Error saving spending: {e}")
         bot.reply_to(message, "An error occurred while saving your spending. Please try again later.")
 
-@bot.message_handler(commands=['Get_spending'])
+@bot.message_handler(commands=['get_spending'])
 def record_spending(message):
     bot.reply_to(message, "Hello, what day do you want to check your spending?")
     bot.register_next_step_handler(message, lambda msg: asyncio.run(Get_spending(msg)))
