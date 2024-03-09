@@ -1,6 +1,7 @@
 import databases
 import orm , os,sys, pytz
 from datetime import datetime
+import uuid
 
 database = databases.Database("sqlite:///db.sqlite")
 
@@ -28,7 +29,7 @@ class User(orm.Model):
     tablename = "User"
     registry = models
     fields = {
-        "id": orm.Integer(primary_key=True),
+        "id": orm.UUID(primary_key=True,default=uuid.uuid4),
         "name": orm.String(max_length=100),
         "username": orm.String(max_length=100, unique=True), 
         "create_at":orm.DateTime(default=utc_now)
@@ -37,7 +38,7 @@ class Chat(orm.Model):
     tablename = "Chat"
     registry = models
     fields = {
-        "id": orm.Integer(primary_key=True),
+        "id": orm.UUID(primary_key=True,default=uuid.uuid4),
         "user_id": orm.ForeignKey(User),
         "message": orm.Text(),
         "create_at":orm.DateTime(default=utc_now)
@@ -46,7 +47,7 @@ class Spending(orm.Model):
     tablename = "spending"
     registry = models
     fields = {
-        "id": orm.Integer(primary_key=True),
+        "id": orm.UUID(primary_key=True,default=uuid.uuid4),
         "user_id": orm.ForeignKey(User),
         "money": orm.Float(),
         "create_at":orm.DateTime(default=utc_now)
