@@ -8,9 +8,8 @@ from Model.User import UserModel
 from migrations.create_table import convert_to_vietnam_time
 
 async def main():
-    user,create = await UserModel.objects.get_or_create( username="john_doe4", defaults={'name':"Hello, World 3!"})
-    user = await UserModel.objects.get(id=user)
-    print(user.name)
+    user,created = await UserModel.objects.get_or_create( username="john_doe4", defaults={'name':"Hello, World 3!"})
+    print("User name:", user.name)
     # # # Seed Chat data
     
     # chat_objects  = await ChatModel.objects.all()

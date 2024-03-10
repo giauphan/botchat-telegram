@@ -32,7 +32,7 @@ class User(orm.Model):
         "id": orm.UUID(primary_key=True,default=uuid.uuid4),
         "name": orm.String(max_length=100),
         "username": orm.String(max_length=100, unique=True), 
-        "create_at":orm.DateTime(default=utc_now)
+        "created_at":orm.DateTime(default=utc_now)
     }
 class Chat(orm.Model):
     tablename = "Chat"
@@ -41,16 +41,16 @@ class Chat(orm.Model):
         "id": orm.UUID(primary_key=True,default=uuid.uuid4),
         "user_id": orm.ForeignKey(User),
         "message": orm.Text(),
-        "create_at":orm.DateTime(default=utc_now)
+        "created_at":orm.DateTime(default=utc_now)
     }
 class Spending(orm.Model):
-    tablename = "spending"
+    tablename = "Spending"
     registry = models
     fields = {
         "id": orm.UUID(primary_key=True,default=uuid.uuid4),
         "user_id": orm.ForeignKey(User),
         "money": orm.Float(),
-        "create_at":orm.DateTime(default=utc_now)
+        "created_at":orm.DateTime(default=utc_now)
     }
 
 def checkConnect():
