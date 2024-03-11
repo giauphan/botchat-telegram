@@ -5,7 +5,6 @@ import os
 def run_migration():
     migration_dir = "migrations"
     migrations = [os.path.join(migration_dir, file) for file in os.listdir(migration_dir) if file.endswith(".py") and file != "__init__.py"]
-    print(migrations)
     for migration in migrations:
         try:
             subprocess.run(["python3",  migration])
