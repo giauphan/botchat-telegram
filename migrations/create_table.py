@@ -34,6 +34,7 @@ class User(orm.Model):
     fields = {
         "id": orm.Integer(primary_key=True),
         "name": orm.String(max_length=255),
+        "email": orm.String(max_length=255),
         "username": orm.String(max_length=100, unique=True),
         "created_at": orm.DateTime(default=utc_now),
         "updated_at": orm.DateTime(default=utc_now),
