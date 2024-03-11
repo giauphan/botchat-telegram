@@ -3,7 +3,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-BOT_SCRIPT_PATH = os.getenv('BOT_SCRIPT_PATH')
+BOT_SCRIPT_PATH = os.getenv("BOT_SCRIPT_PATH")
+
 
 def is_bot_running():
     try:
@@ -12,6 +13,7 @@ def is_bot_running():
     except subprocess.CalledProcessError:
         return False
 
+
 def start_bot():
     if is_bot_running():
         print("Bot is already running.")
@@ -19,10 +21,12 @@ def start_bot():
     print("Starting the bot...")
     subprocess.Popen(["python3", BOT_SCRIPT_PATH])
 
+
 def restart_bot():
     stop_bot()
-    time.sleep(2) 
+    time.sleep(2)
     start_bot()
+
 
 def stop_bot():
     if not is_bot_running():
@@ -30,6 +34,7 @@ def stop_bot():
         return
     print("Stopping the bot...")
     subprocess.run(["pkill", "-f", BOT_SCRIPT_PATH])
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

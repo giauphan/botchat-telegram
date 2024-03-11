@@ -1,12 +1,8 @@
 import subprocess
 
+
 def install_packages():
-    packages = [
-        "telebot",  
-        "python-dotenv",
-        "pytz",
-         "orm"
-    ]
+    packages = ["telebot", "python-dotenv", "pytz", "orm"]
     try:
         subprocess.run(["pip", "install", "--upgrade", "pip"], check=True)
         print("Successfully upgraded pip")
@@ -19,6 +15,6 @@ def install_packages():
         except subprocess.CalledProcessError as e:
             print(f"Failed to install {package}. Error: {e}")
 
+
 if __name__ == "__main__":
     install_packages()
-    

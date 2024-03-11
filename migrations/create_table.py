@@ -13,17 +13,17 @@ def utc_now():
 
 
 def convert_to_vietnam_time(utc_time):
-    utc_timezone = pytz.timezone('UTC')
-    vietnam_timezone = pytz.timezone('Asia/Ho_Chi_Minh')
+    utc_timezone = pytz.timezone("UTC")
+    vietnam_timezone = pytz.timezone("Asia/Ho_Chi_Minh")
     utc_time = utc_time.replace(tzinfo=utc_timezone)
     vietnam_time = utc_time.astimezone(vietnam_timezone)
-    formatted_time = vietnam_time.strftime('%Y-%m-%d %H:%M:%S')
+    formatted_time = vietnam_time.strftime("%Y-%m-%d %H:%M:%S")
     return formatted_time
 
 
 def convert_to_utc(utc_time):
-    utc_timezone = pytz.timezone('UTC')
-    vietnam_timezone = pytz.timezone('Asia/Ho_Chi_Minh')
+    utc_timezone = pytz.timezone("UTC")
+    vietnam_timezone = pytz.timezone("Asia/Ho_Chi_Minh")
     vietnam_time = utc_time.replace(tzinfo=vietnam_timezone)
     utc_time = vietnam_time.astimezone(utc_timezone)
     return utc_time
@@ -47,8 +47,8 @@ class Chat(orm.Model):
         "user_id": orm.ForeignKey(User),
         "message": orm.Text(),
         "created_at": orm.DateTime(default=utc_now),
-        "updated_at": orm.DateTime(default=utc_now)
-    } 
+        "updated_at": orm.DateTime(default=utc_now),
+    }
 
 
 class Spending(orm.Model):
@@ -59,7 +59,7 @@ class Spending(orm.Model):
         "user_id": orm.ForeignKey(User),
         "money": orm.Float(),
         "created_at": orm.DateTime(default=utc_now),
-        "updated_at": orm.DateTime(default=utc_now)
+        "updated_at": orm.DateTime(default=utc_now),
     }
 
 
@@ -69,4 +69,5 @@ async def main():
 
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(main())
