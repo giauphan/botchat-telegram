@@ -6,8 +6,10 @@ from datetime import datetime
 database = Database("sqlite:///migrations/db.sqlite")
 models = orm.ModelRegistry(database=database)
 
+
 def utc_now():
     return datetime.utcnow()
+
 
 def convert_to_vietnam_time(utc_time):
     utc_timezone = pytz.timezone("UTC")

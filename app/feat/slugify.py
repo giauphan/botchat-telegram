@@ -1,6 +1,7 @@
 import re
 import unicodedata
 
+
 def slugify(text):
     """
     Generate a slug from the given text.

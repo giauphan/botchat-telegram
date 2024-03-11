@@ -65,6 +65,7 @@ def slugify(text):
     text = re.sub(r"[-\s]+", "_", text)
     return text
 
+
 try:
     loop = asyncio.get_running_loop()
 except RuntimeError:
@@ -88,7 +89,7 @@ def record_spending(message):
 async def save_spending(message):
     try:
         full_name = get_full_name(message.from_user)
-        user = await  get_info_user(full_name)
+        user = await get_info_user(full_name)
         money_spent = float(message.text)
         await Spending.objects.create(user_id=user, money=money_spent)
         log(message)
@@ -97,7 +98,9 @@ async def save_spending(message):
         logger.error(f"Error saving spending: {e}")
         bot.reply_to(
             message,
-            "An error occurred while saving your spending. Please try again later.")
+            "An error occurred while saving your spending. Please try again later.",
+        )
+
 
 @bot.message_handler(commands=["get_spending"])
 def record_spending(message):
@@ -140,12 +143,14 @@ def echo_all(message):
     asyncio.run(save_chat(message))
     bot.reply_to(message, message.text)
 
+
 def log(message):
     try:
         te = sys.version_info
         logger.info(f"Message from {message.from_user.first_name}: {message.text} {te}")
     except Exception as e:
         logger.error(f"Error logging message: {e}")
+
 
 if __name__ == "__main__":
     bot.infinity_polling()
