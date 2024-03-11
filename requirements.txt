@@ -4,4 +4,4 @@ pytz~=2024.1
 aiosqlite~=0.20.0
 aiomysql~=0.2.0
 SQLAlchemy<=2.0.0
-telebot=0.0.5
+telebot~=0.0.5
