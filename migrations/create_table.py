@@ -4,15 +4,9 @@ import os
 import sys
 import pytz
 from datetime import datetime
-from dotenv import load_dotenv
 
-load_dotenv()
 
-database_url = (
-    f"mysql+aiomysql://{os.getenv('Database_username')}:{os.getenv('Database_password')}"
-    f"@{os.getenv('Database_host')}/{os.getenv('Database_name')}?charset=utf8mb4"
-)
-database = Database(database_url)
+database = Database("sqlite:///migrations/db.sqlite")
 models = orm.ModelRegistry(database=database)
 
 
