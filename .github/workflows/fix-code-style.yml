@@ -1,0 +1,38 @@
+name: fix-code-style
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  fix-code-style:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+
+      - name: Install black
+        run: pip install black
+
+      - name: Run black
+        run: black ./
+
+      - name: Pull changes
+        run: git pull
+     
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'chore: fix code style'
+          token: ${{ secrets.PAT }}
+          ref: ${{ github.head_ref }}
