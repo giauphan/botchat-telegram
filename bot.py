@@ -105,7 +105,7 @@ async def Get_spending(message):
         date = datetime.strptime(date_str, "%d/%m/%Y")
         money = 0
         for get_spending in spending:
-            get_spending_date = get_spending.create_at.strftime("%Y-%m-%d")
+            get_spending_date = get_spending.created_at.strftime("%Y-%m-%d")
             print(get_spending_date,date)
             if date.strftime("%Y-%m-%d") == get_spending_date:
                 money += get_spending.money
