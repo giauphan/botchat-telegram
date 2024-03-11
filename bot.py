@@ -6,7 +6,6 @@ import asyncio
 import sys
 import re
 import unicodedata
-from migrations.create_table import check_connect
 from Model.Chat import ChatModel as Chat
 from Model.User import UserModel as User
 from Model.Spending import Spending as Spending
@@ -73,7 +72,6 @@ def slugify(text):
     text = re.sub(r"[^\w\s-]", "", text).strip().lower()
     text = re.sub(r"[-\s]+", "_", text)
     return text
-
 
 try:
     loop = asyncio.get_running_loop()
