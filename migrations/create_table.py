@@ -3,14 +3,11 @@ import orm
 import pytz
 from datetime import datetime
 
-
 database = Database("sqlite:///migrations/db.sqlite")
 models = orm.ModelRegistry(database=database)
 
-
 def utc_now():
     return datetime.utcnow()
-
 
 def convert_to_vietnam_time(utc_time):
     utc_timezone = pytz.timezone("UTC")
@@ -36,6 +33,8 @@ class User(orm.Model):
         "id": orm.Integer(primary_key=True),
         "name": orm.String(max_length=255),
         "username": orm.String(max_length=100, unique=True),
+        "created_at": orm.DateTime(default=utc_now),
+        "updated_at": orm.DateTime(default=utc_now),
     }
 
 
