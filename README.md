@@ -6,3 +6,5 @@
 ```
 pip install --force-reinstall 'sqlalchemy<2.0.0'
 ```
+
+pip install --force-reinstall 'orm<0.3'
