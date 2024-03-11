@@ -5,11 +5,13 @@ def install_packages():
         "telebot",  
         "python-dotenv",
         "pytz",
-        "databases",
-         "orm",
-         "aiosqlite"
+         "orm"
     ]
-
+    try:
+        subprocess.run(["pip", "install", "--upgrade", "pip"], check=True)
+        print("Successfully upgraded pip")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to upgrade pip. Error: {e}")
     for package in packages:
         try:
             subprocess.run(["pip", "install", package], check=True)

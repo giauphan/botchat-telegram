@@ -1,14 +1,24 @@
-import databases
-import orm , os,sys, pytz
+from databases import Database
+import orm
+import os
+import sys
+import pytz
 from datetime import datetime
-import uuid
+from dotenv import load_dotenv
 
-database = databases.Database("sqlite:///db.sqlite")
+load_dotenv()
 
+database_url = (
+    f"mysql+aiomysql://{os.getenv('Database_username')}:{os.getenv('Database_password')}"
+    f"@{os.getenv('Database_host')}/{os.getenv('Database_name')}?charset=utf8mb4"
+)
+database = Database(database_url)
 models = orm.ModelRegistry(database=database)
+
 
 def utc_now():
     return datetime.utcnow()
+
 
 def convert_to_vietnam_time(utc_time):
     utc_timezone = pytz.timezone('UTC')
@@ -18,57 +28,66 @@ def convert_to_vietnam_time(utc_time):
     formatted_time = vietnam_time.strftime('%Y-%m-%d %H:%M:%S')
     return formatted_time
 
+
 def convert_to_utc(utc_time):
     utc_timezone = pytz.timezone('UTC')
     vietnam_timezone = pytz.timezone('Asia/Ho_Chi_Minh')
-    vietnam_time  = utc_time.replace(tzinfo=vietnam_timezone)
+    vietnam_time = utc_time.replace(tzinfo=vietnam_timezone)
     utc_time = vietnam_time.astimezone(utc_timezone)
     return utc_time
 
+
 class User(orm.Model):
-    tablename = "User"
+    tablename = "users"
     registry = models
     fields = {
-        "id": orm.UUID(primary_key=True,default=uuid.uuid4),
-        "name": orm.String(max_length=100),
-        "username": orm.String(max_length=100, unique=True), 
-        "created_at":orm.DateTime(default=utc_now)
-    }
-class Chat(orm.Model):
-    tablename = "Chat"
-    registry = models
-    fields = {
-        "id": orm.UUID(primary_key=True,default=uuid.uuid4),
-        "user_id": orm.ForeignKey(User),
-        "message": orm.Text(),
-        "created_at":orm.DateTime(default=utc_now)
-    }
-class Spending(orm.Model):
-    tablename = "Spending"
-    registry = models
-    fields = {
-        "id": orm.UUID(primary_key=True,default=uuid.uuid4),
-        "user_id": orm.ForeignKey(User),
-        "money": orm.Float(),
-        "created_at":orm.DateTime(default=utc_now)
+        "id": orm.Integer(primary_key=True),
+        "name": orm.String(max_length=255),
+        "username": orm.String(max_length=100, unique=True),
     }
 
-def checkConnect():
+
+class Chat(orm.Model):
+    tablename = "chats"
+    registry = models
+    fields = {
+        "id": orm.Integer(primary_key=True),
+        "user_id": orm.ForeignKey(User),
+        "message": orm.Text(),
+        "created_at": orm.DateTime(default=utc_now),
+        "updated_at": orm.DateTime(default=utc_now)
+    }
+
+
+class Spending(orm.Model):
+    tablename = "spends"
+    registry = models
+    fields = {
+        "id": orm.Integer(primary_key=True),
+        "user_id": orm.ForeignKey(User),
+        "money": orm.Float(),
+        "created_at": orm.DateTime(default=utc_now),
+        "updated_at": orm.DateTime(default=utc_now)
+    }
+
+
+def check_connect():
     url = str(database.url)
-    if url.startswith("sqlite://"):
-        CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-        PARENT_DIR = os.path.dirname(CURRENT_DIR)
-        sys.path.append(PARENT_DIR)
-        path = PARENT_DIR +url[len("sqlite://"):]
-        if os.path.exists(path):
-            return "Database file exists and is accessible."
-        else:
-            return f"Database file does not exist or is not accessible.{path} {PARENT_DIR}"
+    if url.startswith("mysql+mysqlconnector://"):
+        return "Connected to MySQL database."
     else:
         return "Unsupported database type."
 
 async def main():
     await models.create_all()
+    
+    await database.connect()
+    try:
+        user,create =await User.objects.get_or_create(username="abc2",defaults={'name':'ab2c'})
+    finally:
+        await database.disconnect()
 
-import asyncio
-asyncio.run(main())
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())

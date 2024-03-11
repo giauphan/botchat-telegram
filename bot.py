@@ -6,7 +6,7 @@ import asyncio
 import sys
 import re
 import unicodedata
-from migrations.create_table import checkConnect ,convert_to_utc
+from migrations.create_table import check_connect ,convert_to_utc
 from Model.Chat import ChatModel as Chat
 from Model.User import UserModel as User
 from Model.Spending import Spending as Spending
@@ -120,7 +120,7 @@ async def Get_spending(message):
 
 @bot.message_handler(commands=['connectdb'])
 def send_welcome(message):
-    check = checkConnect()
+    check = check_connect()
     bot.reply_to(message, f"Connect db: {check} ")
 
 @bot.message_handler(commands=['statistical'])
