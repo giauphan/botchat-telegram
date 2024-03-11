@@ -1,7 +1,5 @@
 from databases import Database
 import orm
-import os
-import sys
 import pytz
 from datetime import datetime
 
@@ -50,7 +48,7 @@ class Chat(orm.Model):
         "message": orm.Text(),
         "created_at": orm.DateTime(default=utc_now),
         "updated_at": orm.DateTime(default=utc_now)
-    }
+    } 
 
 
 class Spending(orm.Model):
@@ -65,21 +63,8 @@ class Spending(orm.Model):
     }
 
 
-def check_connect():
-    url = str(database.url)
-    if url.startswith("mysql+mysqlconnector://"):
-        return "Connected to MySQL database."
-    else:
-        return "Unsupported database type."
-
 async def main():
     await models.create_all()
-    
-    await database.connect()
-    try:
-        user,create =await User.objects.get_or_create(username="abc2",defaults={'name':'ab2c'})
-    finally:
-        await database.disconnect()
 
 
 if __name__ == "__main__":

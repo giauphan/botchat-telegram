@@ -6,7 +6,7 @@ import asyncio
 import sys
 import re
 import unicodedata
-from migrations.create_table import check_connect ,convert_to_utc
+from migrations.create_table import check_connect 
 from Model.Chat import ChatModel as Chat
 from Model.User import UserModel as User
 from Model.Spending import Spending as Spending
@@ -14,7 +14,6 @@ from datetime import datetime
 
 load_dotenv()
 
-# Configure logging
 logging.basicConfig(filename='log/bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -104,7 +103,7 @@ async def Get_spending(message):
         date_str = message.text
         date = datetime.strptime(date_str, "%d/%m/%Y")
         money = 0
-        for get_spending in spending:
+        for get_spending in spending: 
             get_spending_date = get_spending.created_at.strftime("%Y-%m-%d")
             print(get_spending_date,date)
             if date.strftime("%Y-%m-%d") == get_spending_date:
@@ -117,11 +116,6 @@ async def Get_spending(message):
     except Exception as e:
         logger.error(f"Error saving spending: {e}")
         bot.reply_to(message, "An error occurred while saving your spending. Please try again later.")
-
-@bot.message_handler(commands=['connectdb'])
-def send_welcome(message):
-    check = check_connect()
-    bot.reply_to(message, f"Connect db: {check} ")
 
 @bot.message_handler(commands=['statistical'])
 def runStatistics(message):

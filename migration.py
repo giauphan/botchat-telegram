@@ -1,11 +1,11 @@
 import subprocess
 import sys
+import os
 
 def run_migration():
-    migrations = [
-       "migrations/create_table.py",
-    ]
-
+    migration_dir = "migrations"
+    migrations = [os.path.join(migration_dir, file) for file in os.listdir(migration_dir) if file.endswith(".py") and file != "__init__.py"]
+    print(migrations)
     for migration in migrations:
         try:
             subprocess.run(["python3",  migration])

@@ -2,7 +2,7 @@ import subprocess
 
 def run_migration():
     migrations = [
-       "migrations/ChatSeed.py",
+       "seeds/ChatSeed.py",
     ]
 
     for migration in migrations:
