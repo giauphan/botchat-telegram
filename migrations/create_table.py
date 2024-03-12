@@ -6,10 +6,8 @@ from datetime import datetime
 database = Database("sqlite:///migrations/db.sqlite")
 models = orm.ModelRegistry(database=database)
 
-
 def utc_now():
     return datetime.utcnow()
-
 
 def convert_to_vietnam_time(utc_time):
     utc_timezone = pytz.timezone("UTC")
@@ -18,7 +16,6 @@ def convert_to_vietnam_time(utc_time):
     vietnam_time = utc_time.astimezone(vietnam_timezone)
     formatted_time = vietnam_time.strftime("%Y-%m-%d %H:%M:%S")
     return formatted_time
-
 
 def convert_to_utc(utc_time):
     utc_timezone = pytz.timezone("UTC")
@@ -39,7 +36,6 @@ class User(orm.Model):
         "updated_at": orm.DateTime(default=utc_now),
     }
 
-
 class Chat(orm.Model):
     tablename = "chats"
     registry = models
@@ -51,7 +47,6 @@ class Chat(orm.Model):
         "updated_at": orm.DateTime(default=utc_now),
     }
 
-
 class Spending(orm.Model):
     tablename = "spends"
     registry = models
@@ -59,10 +54,10 @@ class Spending(orm.Model):
         "id": orm.Integer(primary_key=True),
         "user_id": orm.ForeignKey(User),
         "money": orm.Float(),
+        "notes": orm.String(max_length=255),
         "created_at": orm.DateTime(default=utc_now),
         "updated_at": orm.DateTime(default=utc_now),
     }
-
 
 async def main():
     await models.create_all()
