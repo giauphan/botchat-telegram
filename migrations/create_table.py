@@ -55,8 +55,8 @@ class Spending(orm.Model):
         "id": orm.Integer(primary_key=True),
         "user_id": orm.ForeignKey(User),
         "money": orm.Float(),
-        "notes": orm.String(max_length=255),
-        "created_at": orm.DateTime(default=utc_now),
+        "notes": orm.String(max_length=255, allow_null=True),
+        "created_at": orm.DateTime(default=utc_now), 
         "updated_at": orm.DateTime(default=utc_now),
     }
 
