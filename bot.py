@@ -6,7 +6,7 @@ import os
 import sys
 from Model.Chat import ChatModel as Chat
 from Model.Spending import Spending
-from app.feat.user import getInfoUser,setUpName,setUpEmail ,getFullName
+from app.feat.user import getInfoUser, setUpName, setUpEmail, getFullName
 from app.feat.spending import getSpending
 
 load_dotenv()
@@ -87,15 +87,20 @@ async def get_spending(message):
     try:
         full_name = getFullName(message.from_user)
         date_str = message.text
-        money =await getSpending(full_name,date_str)
+        money = await getSpending(full_name, date_str)
         if money != 0:
             format_money = "{:,.3f}".format(money) + "vnđ"
-            bot.reply_to(message, f"{full_name} spending date {date_str}: {format_money}")
+            bot.reply_to(
+                message, f"{full_name} spending date {date_str}: {format_money}"
+            )
         else:
             bot.reply_to(message, f"find not found date: {date_str}")
     except Exception as e:
         logger.error(f"Error retrieving spending: {e}")
-        bot.reply_to( message, "An error occurred while retrieving your spending. Please try again later.",)
+        bot.reply_to(
+            message,
+            "An error occurred while retrieving your spending. Please try again later.",
+        )
 
 
 @bot.message_handler(commands=["set_email"])
@@ -128,7 +133,11 @@ async def set_user_name(message):
 def show_info(message):
     full_name = getFullName(message.from_user)
     user = asyncio.run(getInfoUser(full_name))
-    bot.reply_to(message, f"\t Info of {user.name} \n Name: {user.name} \n Username: {user.username} \n Email: {user.email}")
+    bot.reply_to(
+        message,
+        f"\t Info of {user.name} \n Name: {user.name} \n Username: {user.username} \n Email: {user.email}",
+    )
+
 
 @bot.message_handler(commands=["statistical"])
 def run_statistics(message):
