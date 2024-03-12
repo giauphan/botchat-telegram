@@ -18,7 +18,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-bot = telebot.TeleBot(os.getenv("api_token"))
+bot = telebot.TeleBot("6627531635:AAFAoNslwVzRn02wF4yWCSeCQXT3tlQITss")
 
 
 async def save_chat(message):
@@ -41,7 +41,7 @@ async def send_statistics(message):
                 message, f"You have sent {num_messages} messages in this chat."
             )
         else:
-            bot.reply_to(message, "You haven't sent any messages yet.")
+            bot.send_message(message.chat.id, "You haven't sent any messages yet.")
     except Exception as e:
         logger.error(f"Error retrieving statistics: {e}")
 
@@ -51,18 +51,18 @@ def send_welcome(message):
     full_name = getFullName(message.from_user)
     user = asyncio.run(getInfoUser(full_name))
     reply = f"Howdy {user.name}, how are you doing?"
-    bot.reply_to(message, reply)
+    bot.send_message(message.chat.id, reply)
 
 
 @bot.message_handler(commands=["help"])
 def send_welcome(message):
-    reply = f"\t You can control me by sending these commands: \n\n /start - Start bot and show command  of bot and description comand there \n /statistical - Message statistics \n /spending  -  Give spending in day \n /get_spending - Get spending in day your need \n /set_email - Set email we can email for your Daily Expense Tracker (Week) \n \show_info - Check info your"
-    bot.reply_to(message, reply)
+    reply = f"\t You can control me by sending these commands: \n\n /start - Start bot and show command  of bot and description comand there \n /statistical - Message statistics \n /spending  -  Give spending in day \n /get_spending - Get spending in day your need \n /set_email - Set email we can email for your Daily Expense Tracker (Week) \n /show_info - Check info your"
+    bot.send_message(message.chat.id, reply)
 
 
 @bot.message_handler(commands=["spending"])
 def record_spending(message):
-    bot.reply_to(message, "Hello, please record your spending today!")
+    bot.send_message(message.chat.id, "Hello, please record your spending today!")
     bot.register_next_step_handler(message, lambda msg: asyncio.run(save_spending(msg)))
 
 
@@ -73,7 +73,7 @@ async def save_spending(message):
         money_spent = float(message.text)
         await Spending.objects.create(user_id=user, money=money_spent)
         log(message)
-        bot.reply_to(message, f"{user.name} spending has been recorded successfully!")
+        bot.send_message(message.chat.id, f"{user.name} spending has been recorded successfully!")
     except Exception as e:
         logger.error(f"Error saving spending: {e}")
         bot.reply_to(
@@ -84,7 +84,7 @@ async def save_spending(message):
 
 @bot.message_handler(commands=["get_spending"])
 def record_spending(message):
-    bot.reply_to(message, "Hello, what day do you want to check your spending?")
+    bot.send_message(message.chat.id, "Hello, what day do you want to check your spending?")
     bot.register_next_step_handler(message, lambda msg: asyncio.run(get_spending(msg)))
 
 
@@ -99,7 +99,7 @@ async def get_spending(message):
                 message, f"{full_name} spending date {date_str}: {format_money}"
             )
         else:
-            bot.reply_to(message, f"find not found date: {date_str}")
+            bot.send_message(message.chat.id, f"find not found date: {date_str}")
     except Exception as e:
         logger.error(f"Error retrieving spending: {e}")
         bot.reply_to(
@@ -110,7 +110,7 @@ async def get_spending(message):
 
 @bot.message_handler(commands=["set_email"])
 def set_email(message):
-    bot.reply_to(message, "Hello, please enter your email.")
+    bot.send_message(message.chat.id, "Hello, please enter your email.")
     bot.register_next_step_handler(
         message, lambda msg: asyncio.run(set_user_email(msg))
     )
@@ -119,19 +119,19 @@ def set_email(message):
 async def set_user_email(message):
     full_name = getFullName(message.from_user)
     await setUpEmail(full_name, message.text)
-    bot.reply_to(message, f"{full_name} set email successfully!")
+    bot.send_message(message.chat.id, f"{full_name} set email successfully!")
 
 
 @bot.message_handler(commands=["set_name"])
 def set_name(message):
-    bot.reply_to(message, "Hello, please enter your name.")
+    bot.send_message(message.chat.id, "Hello, please enter your name.")
     bot.register_next_step_handler(message, lambda msg: asyncio.run(set_user_name(msg)))
 
 
 async def set_user_name(message):
     full_name = getFullName(message.from_user)
     await setUpName(full_name, message.text)
-    bot.reply_to(message, f"{full_name} set name successfully!")
+    bot.send_message(message.chat.id, f"{full_name} set name successfully!")
 
 
 @bot.message_handler(commands=["show_info"])
@@ -152,7 +152,7 @@ def run_statistics(message):
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
     asyncio.run(save_chat(message))
-    bot.reply_to(message, message.text)
+    bot.send_message(message.chat.id, message.text)
 
 
 def log(message):
