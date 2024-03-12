@@ -18,7 +18,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-bot = telebot.TeleBot("6627531635:AAFAoNslwVzRn02wF4yWCSeCQXT3tlQITss")
+bot = telebot.TeleBot(os.getenv("api_token"))
 
 
 async def save_chat(message):
