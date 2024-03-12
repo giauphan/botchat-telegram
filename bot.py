@@ -73,7 +73,9 @@ async def save_spending(message):
         money_spent = float(message.text)
         await Spending.objects.create(user_id=user, money=money_spent)
         log(message)
-        bot.send_message(message.chat.id, f"{user.name} spending has been recorded successfully!")
+        bot.send_message(
+            message.chat.id, f"{user.name} spending has been recorded successfully!"
+        )
     except Exception as e:
         logger.error(f"Error saving spending: {e}")
         bot.reply_to(
@@ -84,7 +86,9 @@ async def save_spending(message):
 
 @bot.message_handler(commands=["get_spending"])
 def record_spending(message):
-    bot.send_message(message.chat.id, "Hello, what day do you want to check your spending?")
+    bot.send_message(
+        message.chat.id, "Hello, what day do you want to check your spending?"
+    )
     bot.register_next_step_handler(message, lambda msg: asyncio.run(get_spending(msg)))
 
 
