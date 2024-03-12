@@ -53,10 +53,12 @@ def send_welcome(message):
     reply = f"Howdy {user.name}, how are you doing?"
     bot.reply_to(message, reply)
 
+
 @bot.message_handler(commands=["help"])
 def send_welcome(message):
     reply = f"\t You can control me by sending these commands: \n\n /start - start bot and show command  of bot and description comand there \n /statistical - message statistics \n /spending  -  give spending in day \n /get_spending - get spending in day your need"
     bot.reply_to(message, reply)
+
 
 @bot.message_handler(commands=["spending"])
 def record_spending(message):
