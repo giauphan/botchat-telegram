@@ -14,7 +14,7 @@ def email_template(name, expense_data):
     return subject, body
 
 
-if __name__ == "__main__":
+def sendMail():
 
     users = asyncio.run(getAllUser())
     for user in users:
