@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 # bot = telebot.TeleBot(os.getenv("api_token"))
 bot = telebot.TeleBot("6627531635:AAFAoNslwVzRn02wF4yWCSeCQXT3tlQITss")
 
+
 async def save_chat(message):
     try:
         full_name = getFullName(message.from_user)
@@ -29,6 +30,7 @@ async def save_chat(message):
         log(message)
     except Exception as e:
         logger.error(f"Error saving chat: {e}")
+
 
 async def send_statistics(message):
     try:
@@ -52,10 +54,12 @@ def send_welcome(message):
     reply = f"Howdy {user.name}, how are you doing?"
     bot.reply_to(message, reply)
 
+
 @bot.message_handler(commands=["spending"])
 def record_spending(message):
     bot.reply_to(message, "Hello, please record your spending today!")
     bot.register_next_step_handler(message, lambda msg: asyncio.run(save_spending(msg)))
+
 
 async def save_spending(message):
     try:
@@ -72,10 +76,12 @@ async def save_spending(message):
             "An error occurred while saving your spending. Please try again later.",
         )
 
+
 @bot.message_handler(commands=["get_spending"])
 def record_spending(message):
     bot.reply_to(message, "Hello, what day do you want to check your spending?")
     bot.register_next_step_handler(message, lambda msg: asyncio.run(get_spending(msg)))
+
 
 async def get_spending(message):
     try:
@@ -91,25 +97,32 @@ async def get_spending(message):
         logger.error(f"Error retrieving spending: {e}")
         bot.reply_to( message, "An error occurred while retrieving your spending. Please try again later.",)
 
+
 @bot.message_handler(commands=["set_email"])
 def set_email(message):
     bot.reply_to(message, "Hello, please enter your email.")
-    bot.register_next_step_handler(message, lambda msg: asyncio.run(set_user_email(msg)))
+    bot.register_next_step_handler(
+        message, lambda msg: asyncio.run(set_user_email(msg))
+    )
+
 
 async def set_user_email(message):
     full_name = getFullName(message.from_user)
     await setUpEmail(full_name, message.text)
     bot.reply_to(message, f"{full_name} set email successfully!")
 
+
 @bot.message_handler(commands=["set_name"])
 def set_name(message):
     bot.reply_to(message, "Hello, please enter your name.")
     bot.register_next_step_handler(message, lambda msg: asyncio.run(set_user_name(msg)))
 
+
 async def set_user_name(message):
     full_name = getFullName(message.from_user)
     await setUpName(full_name, message.text)
     bot.reply_to(message, f"{full_name} set name successfully!")
+
 
 @bot.message_handler(commands=["show_info"])
 def show_info(message):
@@ -121,16 +134,21 @@ def show_info(message):
 def run_statistics(message):
     asyncio.run(send_statistics(message))
 
+
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
     asyncio.run(save_chat(message))
     bot.reply_to(message, message.text)
 
+
 def log(message):
     try:
-        logger.info(f"Message from {message.from_user.first_name}: {message.text} {sys.version_info}")
+        logger.info(
+            f"Message from {message.from_user.first_name}: {message.text} {sys.version_info}"
+        )
     except Exception as e:
         logger.error(f"Error logging message: {e}")
+
 
 if __name__ == "__main__":
     bot.infinity_polling()

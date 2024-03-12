@@ -3,9 +3,7 @@ from app.feat.slugify import slugify
 
 
 async def getInfoUser(username):
-    user, created = await User.objects.get_or_create(
-        username=slugify(username), defaults={"name": username}
-    )
+    user, created = await User.objects.get_or_create(username=slugify(username), defaults={"name": username})
 
     return user
 
