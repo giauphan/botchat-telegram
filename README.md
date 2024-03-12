@@ -48,11 +48,7 @@ Before you start, ensure you have the following prerequisites installed on your 
     pip install -r requirements.txt
     ```
 
-# Fix not create record in table use orm 
 
-```
-pip install --force-reinstall 'sqlalchemy<2.0.0'
-```
 1. **Create a `.env` file in the project root and set the required environment variables. Example:**
 
     ```plaintext
@@ -71,3 +67,8 @@ pip install --force-reinstall 'sqlalchemy<2.0.0'
     ```
 
     Update the URLs based on your specific requirements.
+# Fix not create record in table use orm 
+    
+    ```
+    pip install --force-reinstall 'sqlalchemy<2.0.0'
+    ```
