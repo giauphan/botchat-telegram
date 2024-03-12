@@ -18,8 +18,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# bot = telebot.TeleBot(os.getenv("api_token"))
-bot = telebot.TeleBot("6627531635:AAFAoNslwVzRn02wF4yWCSeCQXT3tlQITss")
+bot = telebot.TeleBot(os.getenv("api_token"))
 
 
 async def save_chat(message):
@@ -47,13 +46,17 @@ async def send_statistics(message):
         logger.error(f"Error retrieving statistics: {e}")
 
 
-@bot.message_handler(commands=["start", "help"])
+@bot.message_handler(commands=["start"])
 def send_welcome(message):
     full_name = getFullName(message.from_user)
     user = asyncio.run(getInfoUser(full_name))
     reply = f"Howdy {user.name}, how are you doing?"
     bot.reply_to(message, reply)
 
+@bot.message_handler(commands=["help"])
+def send_welcome(message):
+    reply = f"\t You can control me by sending these commands: \n\n /start - start bot and show command  of bot and description comand there \n /statistical - message statistics \n /spending  -  give spending in day \n /get_spending - get spending in day your need"
+    bot.reply_to(message, reply)
 
 @bot.message_handler(commands=["spending"])
 def record_spending(message):
