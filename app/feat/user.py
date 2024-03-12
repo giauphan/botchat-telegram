@@ -8,3 +8,17 @@ async def get_info_user(username):
     )
 
     return user
+
+async def set_up_email(username,email):
+    user = await User.objects.filter(username=slugify(username)).first()
+    await user.update(email=email)
+
+async def set_up_name(username,name):
+    user = await User.objects.filter(username=slugify(username)).first()
+    await user.update(name=name)
+
+def get_full_name(user):
+    if user.last_name:
+        return f"{user.first_name} {user.last_name}"
+    else:
+        return user.first_name

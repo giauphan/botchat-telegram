@@ -27,14 +27,13 @@ def convert_to_utc(utc_time):
     utc_time = vietnam_time.astimezone(utc_timezone)
     return utc_time
 
-
 class User(orm.Model):
     tablename = "users"
     registry = models
     fields = {
         "id": orm.Integer(primary_key=True),
         "name": orm.String(max_length=255),
-        "email": orm.String(max_length=255),
+        "email": orm.String(max_length=255,allow_null=True),
         "username": orm.String(max_length=100, unique=True),
         "created_at": orm.DateTime(default=utc_now),
         "updated_at": orm.DateTime(default=utc_now),
