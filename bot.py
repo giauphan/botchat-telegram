@@ -57,7 +57,7 @@ def send_welcome(message):
 
 @bot.message_handler(commands=["help"])
 def send_welcome(message):
-    reply = f"\t You can control me by sending these commands: \n\n /start - Start bot and show command  of bot and description comand there \n /statistical - Message statistics \n /spending  -  Give spending in day \n /get_spending - Get spending in day your need \n /send_spending - send email for user \n /set_email - Set email we can email for your Daily Expense Tracker (Week) \n /show_info - Check info your"
+    reply = f"\t You can control me by sending these commands: \n\n /start - Start bot  \n /statistical - Message statistics \n /spending  -  Give spending in day \n /get_spending - Get spending in day your need \n /send_spending - send email for user \n /set_email - Set email we can email for your  \n /show_info - Check info your"
     bot.send_message(message.chat.id, reply)
 
 

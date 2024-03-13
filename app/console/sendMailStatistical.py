@@ -7,7 +7,6 @@ from app.feat.spending import sumMoneyLast7Weeks
 
 load_dotenv()
 
-
 def email_template(name, expense_data):
     subject = f"📊 Your Daily Expense Tracker (Week) - {name}"
     body = f"Hi {name},\n\nManaging your finances is crucial for a balanced life! Let's keep track of your expenses together. 💰\n\nExpense Tracker for {expense_data['date']}:\n\nCategory: {expense_data['category']}\nAmount: {expense_data['amount']} {expense_data['currency']}\n\n\nStay on top of your spending habits and work towards your financial goals! 💪\n\nLooking forward to seeing your progress.\n\nBest regards,\n{os.getenv('App_name')}"
