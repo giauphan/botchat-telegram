@@ -8,6 +8,7 @@ from Model.Chat import ChatModel as Chat
 from Model.Spending import Spending
 from app.feat.user import getInfoUser, setUpName, setUpEmail, getFullName
 from app.feat.spending import getSpending
+from app.console.sendMailStatistical import sendMailUser
 
 load_dotenv()
 
@@ -18,7 +19,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-bot = telebot.TeleBot(os.getenv("api_token"))
+bot = telebot.TeleBot('6627531635:AAFAoNslwVzRn02wF4yWCSeCQXT3tlQITss')
 
 
 async def save_chat(message):
@@ -56,7 +57,7 @@ def send_welcome(message):
 
 @bot.message_handler(commands=["help"])
 def send_welcome(message):
-    reply = f"\t You can control me by sending these commands: \n\n /start - Start bot and show command  of bot and description comand there \n /statistical - Message statistics \n /spending  -  Give spending in day \n /get_spending - Get spending in day your need \n /set_email - Set email we can email for your Daily Expense Tracker (Week) \n /show_info - Check info your"
+    reply = f"\t You can control me by sending these commands: \n\n /start - Start bot and show command  of bot and description comand there \n /statistical - Message statistics \n /spending  -  Give spending in day \n /get_spending - Get spending in day your need \n /send_spending - send email for user \n /set_email - Set email we can email for your Daily Expense Tracker (Week) \n /show_info - Check info your"
     bot.send_message(message.chat.id, reply)
 
 
@@ -152,6 +153,11 @@ def show_info(message):
 def run_statistics(message):
     asyncio.run(send_statistics(message))
 
+@bot.message_handler(commands=["send_spending"])
+def run_statistics(message):
+    full_name = getFullName(message.from_user)
+    sendMailUser(full_name)
+    bot.send_message(message.chat.id, f"we send speding to your email  successfully!")
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
