@@ -19,7 +19,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-bot = telebot.TeleBot('6627531635:AAFAoNslwVzRn02wF4yWCSeCQXT3tlQITss')
+bot = telebot.TeleBot("6627531635:AAFAoNslwVzRn02wF4yWCSeCQXT3tlQITss")
 
 
 async def save_chat(message):
@@ -153,11 +153,13 @@ def show_info(message):
 def run_statistics(message):
     asyncio.run(send_statistics(message))
 
+
 @bot.message_handler(commands=["send_spending"])
 def run_statistics(message):
     full_name = getFullName(message.from_user)
     sendMailUser(full_name)
     bot.send_message(message.chat.id, f"we send speding to your email  successfully!")
+
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):

@@ -1,6 +1,6 @@
 from app.feat.sendEmail import create_email_message, send_email, connect_to_smtp
 import asyncio
-from app.feat.user import getAllUser,getInfoUser
+from app.feat.user import getAllUser, getInfoUser
 from dotenv import load_dotenv
 import os
 from app.feat.spending import sumMoneyLast7Weeks
@@ -32,18 +32,19 @@ def sendMail():
         formMail = create_email_message(send_to, subject, body)
         send_email(formMail, send_to)
 
+
 def sendMailUser(username):
 
-        user = asyncio.run(getInfoUser(username))
-        amount, date = asyncio.run(sumMoneyLast7Weeks(user.id))
-        expense_data = {
-            "date": date,
-            "category": "Expense Tracker",
-            "amount": "{:,.3f}".format(amount),
-            "currency": "Vnđ",
-        }
+    user = asyncio.run(getInfoUser(username))
+    amount, date = asyncio.run(sumMoneyLast7Weeks(user.id))
+    expense_data = {
+        "date": date,
+        "category": "Expense Tracker",
+        "amount": "{:,.3f}".format(amount),
+        "currency": "Vnđ",
+    }
 
-        send_to = user.email
-        subject, body = email_template(user.name, expense_data)
-        formMail = create_email_message(send_to, subject, body)
-        send_email(formMail, send_to)
+    send_to = user.email
+    subject, body = email_template(user.name, expense_data)
+    formMail = create_email_message(send_to, subject, body)
+    send_email(formMail, send_to)
