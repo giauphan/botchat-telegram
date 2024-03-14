@@ -41,17 +41,35 @@ async def getSpendingDetail(full_name, date_str):
     return response
 
 
-async def sumMoneyLast7Weeks(user_id):
+async def sumMoneyLast7Weeks(user):
 
-    seven_days_ago = datetime.now() - timedelta(days=7)
+    day_now = datetime.now()
+    seven_days_ago = day_now - timedelta(days=7)
 
     records = await Spending.objects.filter(
-        created_at__gte=seven_days_ago, user_id=user_id
+        created_at__gte=seven_days_ago, user_id=user.id
     ).all()
+
+    data = ''
+
+    for day in range(1,8):
+        date = day_now - timedelta(days=day)
+        total_day = await getSpending(user.name, date.strftime("%d/%m/%Y")) 
+        total_day_float = total_day 
+        data += f"Day: {date.strftime('%Y-%m-%d')}, Total amount: {formatMoney(float(total_day_float))}\n"
 
     total_money_spent = sum(record.money for record in records)
 
-    return total_money_spent, seven_days_ago
+    expense_data = {
+        "date": seven_days_ago.strftime("%d/%m/%Y"),
+        "day_now": day_now.strftime("%d/%m/%Y"),
+        "category": "Expense Tracker",
+        "total": formatMoney(float(total_money_spent)),
+        "currency": "Vnđ",
+        "total_in_day":data
+    }
+
+    return expense_data,data
 
 
 def formatMoney(money):

@@ -1,4 +1,4 @@
-from app.feat.sendEmail import create_email_message, send_email, connect_to_smtp
+from app.feat.sendEmail import create_email_message, send_email
 import asyncio
 from app.feat.user import getAllUser, getInfoUser
 from dotenv import load_dotenv
@@ -10,7 +10,7 @@ load_dotenv()
 
 def email_template(name, expense_data):
     subject = f"📊 Your Daily Expense Tracker (Week) - {name}"
-    body = f"Hi {name},\n\nManaging your finances is crucial for a balanced life! Let's keep track of your expenses together. 💰\n\nExpense Tracker for {expense_data['date']}:\n\nCategory: {expense_data['category']}\nAmount: {expense_data['amount']} {expense_data['currency']}\n\n\nStay on top of your spending habits and work towards your financial goals! 💪\n\nLooking forward to seeing your progress.\n\nBest regards,\n{os.getenv('App_name')}"
+    body = f"Hi {name},\n\nManaging your finances is crucial for a balanced life! Let's keep track of your expenses together. 💰\n\nExpense Tracker for {expense_data['date']} - {expense_data['day_now']}:\n {expense_data['total_in_day']} \n \nCategory: {expense_data['category']}\nTotal amount: {expense_data['total']} {expense_data['currency']}\n\n\nStay on top of your spending habits and work towards your financial goals! 💪\n\nLooking forward to seeing your progress.\n\nBest regards,\n{os.getenv('App_name')}"
     return subject, body
 
 
@@ -19,13 +19,7 @@ def sendMail():
     users = asyncio.run(getAllUser())
     for user in users:
 
-        amount, date = asyncio.run(sumMoneyLast7Weeks(user.id))
-        expense_data = {
-            "date": date,
-            "category": "Expense Tracker",
-            "amount": amount,
-            "currency": "Vnđ",
-        }
+        expense_data = asyncio.run(sumMoneyLast7Weeks(user.id))
 
         send_to = user.email
         subject, body = email_template(user.name, expense_data)
@@ -36,13 +30,7 @@ def sendMail():
 def sendMailUser(username):
 
     user = asyncio.run(getInfoUser(username))
-    amount, date = asyncio.run(sumMoneyLast7Weeks(user.id))
-    expense_data = {
-        "date": date,
-        "category": "Expense Tracker",
-        "amount": "{:,.3f}".format(amount),
-        "currency": "Vnđ",
-    }
+    expense_data, date = asyncio.run(sumMoneyLast7Weeks(user))
 
     send_to = user.email
     subject, body = email_template(user.name, expense_data)
