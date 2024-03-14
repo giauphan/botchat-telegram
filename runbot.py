@@ -13,12 +13,14 @@ def is_bot_running():
     except subprocess.CalledProcessError:
         return False
 
+
 def status_bot():
     if is_bot_running():
         print("Bot is already running.")
         return
 
     print("Bot is not running.")
+
 
 def start_bot():
     if is_bot_running():
