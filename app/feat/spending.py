@@ -52,7 +52,7 @@ async def sumMoneyLast7Weeks(user):
 
     data = ""
 
-    for day in range(1, 8):
+    for day in range(0, 7):
         date = day_now - timedelta(days=day)
         total_day = await getSpending(user.name, date.strftime("%d/%m/%Y"))
         total_day_float = total_day
