@@ -13,6 +13,12 @@ def is_bot_running():
     except subprocess.CalledProcessError:
         return False
 
+def status_bot():
+    if is_bot_running():
+        print("Bot is already running.")
+        return
+
+    print("Bot is not running.")
 
 def start_bot():
     if is_bot_running():
@@ -49,6 +55,8 @@ if __name__ == "__main__":
         restart_bot()
     elif action == "stop":
         stop_bot()
+    elif action == "status":
+        status_bot()
     else:
         print("Invalid action. Please use 'start', 'restart', or 'stop'.")
         sys.exit(1)
