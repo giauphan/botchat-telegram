@@ -7,7 +7,7 @@ import sys
 from Model.Chat import ChatModel as Chat
 from Model.Spending import Spending
 from app.feat.user import getInfoUser, setUpName, setUpEmail, getFullName
-from app.feat.spending import getSpending
+from app.feat.spending import getSpendingDetail, formatMoney
 from app.console.sendMailStatistical import sendMailUser
 
 load_dotenv()
@@ -72,10 +72,29 @@ async def save_spending(message):
         full_name = getFullName(message.from_user)
         user = await getInfoUser(full_name)
         money_spent = float(message.text)
-        await Spending.objects.create(user_id=user, money=money_spent)
+        bot.send_message(
+            message.chat.id,
+            f"{user.name} spending has been recorded successfully. Now, please enter any notes you have",
+        )
+        bot.register_next_step_handler(
+            message, lambda msg: asyncio.run(save_notes(msg, money_spent, user))
+        )
+    except Exception as e:
+        logger.error(f"Error saving spending: {e}")
+        bot.reply_to(
+            message,
+            "An error occurred while saving your spending. Please try again later.",
+        )
+
+
+async def save_notes(message, money_spent, user):
+    try:
+        notes = message.text
+        await Spending.objects.create(user_id=user, money=money_spent, notes=notes)
         log(message)
         bot.send_message(
-            message.chat.id, f"{user.name} spending has been recorded successfully!"
+            message.chat.id,
+            f"{user.name} spending notes has been recorded successfully!",
         )
     except Exception as e:
         logger.error(f"Error saving spending: {e}")
@@ -97,12 +116,9 @@ async def get_spending(message):
     try:
         full_name = getFullName(message.from_user)
         date_str = message.text
-        money = await getSpending(full_name, date_str)
-        if money != 0:
-            format_money = "{:,.3f}".format(money) + "vnđ"
-            bot.reply_to(
-                message, f"{full_name} spending date {date_str}: {format_money}"
-            )
+        spending = await getSpendingDetail(full_name, date_str)
+        if spending:
+            bot.reply_to(message, spending)
         else:
             bot.send_message(message.chat.id, f"find not found date: {date_str}")
     except Exception as e:
