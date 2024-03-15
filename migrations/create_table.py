@@ -65,6 +65,7 @@ class Spending(orm.Model):
         "updated_at": orm.DateTime(default=utc_now),
     }
 
+
 class Income(orm.Model):
     tablename = "incomes"
     registry = models

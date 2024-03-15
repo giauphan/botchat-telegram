@@ -105,12 +105,14 @@ async def save_notes(message, money_spent, user):
             "An error occurred while saving your spending. Please try again later.",
         )
 
+
 @bot.message_handler(commands=["get_spending"])
 def record_spending(message):
     bot.send_message(
         message.chat.id, "Hello, what day do you want to check your spending?"
     )
     bot.register_next_step_handler(message, lambda msg: asyncio.run(get_spending(msg)))
+
 
 async def get_spending(message):
     try:
@@ -127,6 +129,7 @@ async def get_spending(message):
             message,
             "An error occurred while retrieving your income. Please try again later.",
         )
+
 
 @bot.message_handler(commands=["income"])
 def record_income(message):
