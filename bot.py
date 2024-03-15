@@ -118,16 +118,16 @@ async def get_spending(message):
     try:
         full_name = getFullName(message.from_user)
         date_str = message.text
-        income = await getSpendingDetail(full_name, date_str)
-        if income:
-            bot.reply_to(message, income)
+        spending = await getSpendingDetail(full_name, date_str)
+        if spending:
+            bot.reply_to(message, spending)
         else:
             bot.send_message(message.chat.id, f"find not found date: {date_str}")
     except Exception as e:
-        logger.error(f"Error retrieving income: {e}")
+        logger.error(f"Error retrieving spending: {e}")
         bot.reply_to(
             message,
-            "An error occurred while retrieving your income. Please try again later.",
+            "An error occurred while retrieving your spending. Please try again later.",
         )
 
 
