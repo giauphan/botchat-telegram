@@ -6,8 +6,10 @@ import os
 import sys
 from Model.Chat import ChatModel as Chat
 from Model.Spending import Spending
+from Model.Income import Income
 from app.feat.user import getInfoUser, setUpName, setUpEmail, getFullName
 from app.feat.spending import getSpendingDetail
+from app.feat.Income import getIncomeDetail
 from app.console.sendMailStatistical import sendMailUser
 
 load_dotenv()
@@ -103,7 +105,6 @@ async def save_notes(message, money_spent, user):
             "An error occurred while saving your spending. Please try again later.",
         )
 
-
 @bot.message_handler(commands=["get_spending"])
 def record_spending(message):
     bot.send_message(
@@ -111,21 +112,87 @@ def record_spending(message):
     )
     bot.register_next_step_handler(message, lambda msg: asyncio.run(get_spending(msg)))
 
-
 async def get_spending(message):
     try:
         full_name = getFullName(message.from_user)
         date_str = message.text
-        spending = await getSpendingDetail(full_name, date_str)
-        if spending:
-            bot.reply_to(message, spending)
+        income = await getSpendingDetail(full_name, date_str)
+        if income:
+            bot.reply_to(message, income)
         else:
             bot.send_message(message.chat.id, f"find not found date: {date_str}")
     except Exception as e:
-        logger.error(f"Error retrieving spending: {e}")
+        logger.error(f"Error retrieving income: {e}")
         bot.reply_to(
             message,
-            "An error occurred while retrieving your spending. Please try again later.",
+            "An error occurred while retrieving your income. Please try again later.",
+        )
+
+@bot.message_handler(commands=["income"])
+def record_income(message):
+    bot.send_message(message.chat.id, "Hello, please record your income today!")
+    bot.register_next_step_handler(message, lambda msg: asyncio.run(save_income(msg)))
+
+
+async def save_income(message):
+    try:
+        full_name = getFullName(message.from_user)
+        user = await getInfoUser(full_name)
+        money_spent = float(message.text)
+        bot.send_message(
+            message.chat.id,
+            f"{user.name} income has been recorded successfully. Now, please enter any notes you have",
+        )
+        bot.register_next_step_handler(
+            message, lambda msg: asyncio.run(save_sources(msg, money_spent, user))
+        )
+    except Exception as e:
+        logger.error(f"Error saving income: {e}")
+        bot.reply_to(
+            message,
+            "An error occurred while saving your income. Please try again later.",
+        )
+
+
+async def save_sources(message, money_spent, user):
+    try:
+        source = message.text
+        await Income.objects.create(user_id=user, amount=money_spent, source=source)
+        log(message)
+        bot.send_message(
+            message.chat.id,
+            f"{user.name} income source has been recorded successfully!",
+        )
+    except Exception as e:
+        logger.error(f"Error saving income: {e}")
+        bot.reply_to(
+            message,
+            "An error occurred while saving your income. Please try again later.",
+        )
+
+
+@bot.message_handler(commands=["get_income"])
+def record_income(message):
+    bot.send_message(
+        message.chat.id, "Hello, what day do you want to check your income?"
+    )
+    bot.register_next_step_handler(message, lambda msg: asyncio.run(get_income(msg)))
+
+
+async def get_income(message):
+    try:
+        full_name = getFullName(message.from_user)
+        date_str = message.text
+        income = await getIncomeDetail(full_name, date_str)
+        if income:
+            bot.reply_to(message, income)
+        else:
+            bot.send_message(message.chat.id, f"find not found date: {date_str}")
+    except Exception as e:
+        logger.error(f"Error retrieving income: {e}")
+        bot.reply_to(
+            message,
+            "An error occurred while retrieving your income. Please try again later.",
         )
 
 
