@@ -59,8 +59,20 @@ class Spending(orm.Model):
     fields = {
         "id": orm.Integer(primary_key=True),
         "user_id": orm.ForeignKey(User),
-        "money": orm.Float(),
+        "amount": orm.Float(),
         "notes": orm.String(max_length=255, allow_null=True),
+        "created_at": orm.DateTime(default=utc_now),
+        "updated_at": orm.DateTime(default=utc_now),
+    }
+
+class Income(orm.Model):
+    tablename = "incomes"
+    registry = models
+    fields = {
+        "id": orm.Integer(primary_key=True),
+        "user_id": orm.ForeignKey(User),
+        "amount": orm.Float(),
+        "source": orm.String(max_length=255, allow_null=True),
         "created_at": orm.DateTime(default=utc_now),
         "updated_at": orm.DateTime(default=utc_now),
     }
