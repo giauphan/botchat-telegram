@@ -2,8 +2,13 @@ from databases import Database
 import orm
 import pytz
 from datetime import datetime
+import os
 
-database = Database("sqlite:///migrations/db.sqlite")
+database_url = (
+    f"mysql+aiomysql://{os.getenv('Database_username')}:{os.getenv('Database_password')}"
+    f"@{os.getenv('Database_host')}/{os.getenv('Database_name')}?charset=utf8mb4"
+)
+database = Database(database_url)
 models = orm.ModelRegistry(database=database)
 
 
