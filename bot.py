@@ -235,7 +235,7 @@ def show_info(message):
     user = asyncio.run(getInfoUser(full_name))
     bot.reply_to(
         message,
-        f"\t Info of {user.name} \n Name: {user.name} \n Username: {user.username} \n Email: {user.email} \n account blade: {formatMoney(user.account_balance or 0)}",
+        f"\t Info of {user.name} \n Name: {user.name} \n Username: {user.username} \n Email: {user.email} \n account blade: {formatMoney(user.account_balance)}",
     )
 
 
