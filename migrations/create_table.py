@@ -79,8 +79,9 @@ class Income(orm.Model):
         "updated_at": orm.DateTime(default=utc_now),
     }
 
+
 async def main():
-        await models.create_all()
+    await models.create_all()
 
 
 if __name__ == "__main__":
