@@ -7,7 +7,7 @@ import sys
 from Model.Chat import ChatModel as Chat
 from Model.Spending import Spending
 from Model.Income import Income
-from app.feat.user import getInfoUser, setUpName, setUpEmail, getFullName,UpdateMoney
+from app.feat.user import getInfoUser, setUpName, setUpEmail, getFullName, UpdateMoney
 from app.feat.spending import getSpendingDetail
 from app.feat.Income import getIncomeDetail
 from app.console.sendMailStatistical import sendMailUser
