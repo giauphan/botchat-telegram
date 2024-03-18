@@ -74,5 +74,5 @@ async def sumMoneyLast7Weeks(user):
 
 
 def formatMoney(money):
-    format_money = "{:,.3f}".format(float(money)) + " vnđ"
+    format_money = "{:,.3f}".format(float(money or 0)) + " vnđ"
     return format_money
