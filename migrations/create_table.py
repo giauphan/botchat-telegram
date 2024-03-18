@@ -83,12 +83,14 @@ class Income(orm.Model):
 async def add_account_balance_number_column():
     await database.execute("ALTER TABLE users ADD COLUMN account_balance float")
 
+
 async def main():
     try:
         await models.create_all()
         await add_account_balance_number_column()
     except:
         await models.create_all()
+
 
 if __name__ == "__main__":
     import asyncio
