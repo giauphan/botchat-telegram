@@ -36,7 +36,7 @@ class User(orm.Model):
         "name": orm.String(max_length=255),
         "email": orm.String(max_length=255, allow_null=True),
         "username": orm.String(max_length=100, unique=True),
-        "account_balance": orm.Float(default=0),
+        "account_balance": orm.Float(),
         "created_at": orm.DateTime(default=utc_now),
         "updated_at": orm.DateTime(default=utc_now),
     }
@@ -82,7 +82,7 @@ class Income(orm.Model):
 
 async def add_account_balance_number_column():
     await database.execute(
-        "ALTER TABLE Persons ADD COLUMN account_balance float DEFAULT 0"
+        "ALTER TABLE Persons ALTER COLUMN account_balance float DEFAULT 0"
     )
 
 
