@@ -164,7 +164,8 @@ async def save_sources(message, money_spent, user):
     try:
         source = message.text
         await Income.objects.create(user_id=user, amount=money_spent, source=source)
-        account_balance = user.account_balance + money_spent
+        useraccount_balance = user.account_balance or 0
+        account_balance = useraccount_balance + money_spent
         await UpdateMoney(user.username, account_balance)
         log(message)
         bot.send_message(
