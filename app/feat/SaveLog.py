@@ -7,6 +7,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 def log(message):
     try:
         logger.info(

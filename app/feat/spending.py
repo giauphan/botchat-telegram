@@ -4,6 +4,7 @@ from app.feat.user import getInfoUser
 from datetime import timedelta, datetime
 from telebot import types
 
+
 async def getSpending(full_name, date_str):
     user = await getInfoUser(full_name)
     spending = await Spending.objects.filter(user_id=user).all()
@@ -72,14 +73,18 @@ async def sumMoneyLast7Weeks(user):
 
     return expense_data, data
 
+
 def build_date_keyboard():
     keyboard = types.InlineKeyboardMarkup()
     today = datetime.now().date()
     for days_offset in range(-7, 8):
-        date_str = (today + timedelta(days=days_offset)).strftime('%Y-%m-%d')
-        button = types.InlineKeyboardButton(text=date_str, callback_data=f'date:{date_str}')
+        date_str = (today + timedelta(days=days_offset)).strftime("%Y-%m-%d")
+        button = types.InlineKeyboardButton(
+            text=date_str, callback_data=f"date:{date_str}"
+        )
         keyboard.add(button)
     return keyboard
+
 
 def formatMoney(money):
     format_money = "{:,.3f}".format(float(money or 0)) + " vnđ"

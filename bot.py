@@ -8,8 +8,8 @@ from app.feat.user import getInfoUser, setUpName, setUpEmail, getFullName, Updat
 from app.feat.spending import getSpendingDetail, formatMoney
 from app.feat.Income import getIncomeDetail
 from app.console.sendMailStatistical import sendMailUser
-from app.feat.SaveLog import log,logger
-from app.feat.Chat import statistics,saveChat
+from app.feat.SaveLog import log, logger
+from app.feat.Chat import statistics, saveChat
 
 load_dotenv()
 
@@ -19,7 +19,7 @@ bot = telebot.TeleBot(os.getenv("api_token"))
 async def send_statistics(message):
     try:
         num_messages = await statistics(message)
-        bot.reply_to( message, f"You have sent {num_messages} messages in this chat.")
+        bot.reply_to(message, f"You have sent {num_messages} messages in this chat.")
     except Exception as e:
         logger.error(f"Error retrieving statistics: {e}")
 
@@ -87,7 +87,8 @@ async def save_notes(message, money_spent, user):
 @bot.message_handler(commands=["get_spending"])
 def record_spending(message):
     bot.send_message(
-        message.chat.id, "Hello, what day do you want to check your spending? Date format: day/month/year?"
+        message.chat.id,
+        "Hello, what day do you want to check your spending? Date format: day/month/year?",
     )
     bot.register_next_step_handler(message, lambda msg: asyncio.run(get_spending(msg)))
 
@@ -108,21 +109,27 @@ async def get_spending(message):
             "An error occurred while retrieving your spending. Please try again later.",
         )
 
-@bot.message_handler(commands=['expense'])
+
+@bot.message_handler(commands=["expense"])
 def record_quick_expense(message):
     try:
-        parts = message.text.split(' ', 2)
+        parts = message.text.split(" ", 2)
         amount = float(parts[1])
-        category = parts[2] if len(parts) > 2 else 'Uncategorized'
+        category = parts[2] if len(parts) > 2 else "Uncategorized"
 
         full_name = getFullName(message.from_user)
         user = asyncio.run(getInfoUser(full_name))
 
-        asyncio.run(save_quick_expense(user,amount,category))
-        bot.reply_to(message, f"Expense of {formatMoney(amount)} for {category} has been recorded.")
+        asyncio.run(save_quick_expense(user, amount, category))
+        bot.reply_to(
+            message,
+            f"Expense of {formatMoney(amount)} for {category} has been recorded.",
+        )
 
     except (IndexError, ValueError):
-        bot.reply_to(message, "Invalid expense format. Usage: /expense <amount> <category>")
+        bot.reply_to(
+            message, "Invalid expense format. Usage: /expense <amount> <category>"
+        )
 
 
 async def save_quick_expense(user, amount, category):
@@ -130,7 +137,6 @@ async def save_quick_expense(user, amount, category):
     await Spending.objects.create(user_id=user, money=amount, notes=category)
     account_balance = user.account_balance - amount
     await UpdateMoney(user.username, account_balance)
-
 
 
 @bot.message_handler(commands=["income"])
@@ -256,7 +262,6 @@ def run_statistics(message):
 def echo_all(message):
     asyncio.run(saveChat(message))
     bot.send_message(message.chat.id, message.text)
-
 
 
 if __name__ == "__main__":
