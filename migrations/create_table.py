@@ -81,7 +81,7 @@ class Income(orm.Model):
 
 
 async def add_account_balance_number_column():
-    await database.execute("ALTER TABLE Persons ALTER  account_balance SET DEFAULT 0")
+    await database.execute("ALTER TABLE Persons ALTER COLUMN account_balance SET DEFAULT 0")
 
 
 async def main():
