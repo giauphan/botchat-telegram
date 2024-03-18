@@ -7,7 +7,7 @@ import sys
 from Model.Chat import ChatModel as Chat
 from Model.Spending import Spending
 from Model.Income import Income
-from app.feat.user import getInfoUser, setUpName, setUpEmail, getFullName
+from app.feat.user import getInfoUser, setUpName, setUpEmail, getFullName,UpdateMoney
 from app.feat.spending import getSpendingDetail
 from app.feat.Income import getIncomeDetail
 from app.console.sendMailStatistical import sendMailUser
@@ -93,6 +93,7 @@ async def save_notes(message, money_spent, user):
     try:
         notes = message.text
         await Spending.objects.create(user_id=user, money=money_spent, notes=notes)
+
         log(message)
         bot.send_message(
             message.chat.id,
@@ -161,6 +162,8 @@ async def save_sources(message, money_spent, user):
     try:
         source = message.text
         await Income.objects.create(user_id=user, amount=money_spent, source=source)
+        account_balance = user.account_balance + money_spent
+        await UpdateMoney(user.username, account_balance)
         log(message)
         bot.send_message(
             message.chat.id,
@@ -231,7 +234,7 @@ def show_info(message):
     user = asyncio.run(getInfoUser(full_name))
     bot.reply_to(
         message,
-        f"\t Info of {user.name} \n Name: {user.name} \n Username: {user.username} \n Email: {user.email}",
+        f"\t Info of {user.name} \n Name: {user.name} \n Username: {user.username} \n Email: {user.email} \n account blade: {user.account_balance}",
     )
 
 

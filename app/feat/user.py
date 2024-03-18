@@ -20,6 +20,9 @@ async def setUpEmail(username, email):
     user = await User.objects.filter(username=slugify(username)).first()
     await user.update(email=email)
 
+async def UpdateMoney(username, account_balance):
+    user = await User.objects.filter(username=slugify(username)).first()
+    await user.update(account_balance=account_balance)
 
 async def setUpName(username, name):
     user = await User.objects.filter(username=slugify(username)).first()
