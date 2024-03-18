@@ -93,7 +93,7 @@ async def save_notes(message, money_spent, user):
     try:
         notes = message.text
         await Spending.objects.create(user_id=user, money=money_spent, notes=notes)
-        account_balance = user.account_balance - money_spent
+        account_balance = (user.account_balance or 0) - money_spent
         await user.update(account_balance=account_balance)
         log(message)
         bot.send_message(
