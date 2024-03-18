@@ -62,6 +62,7 @@ async def sumMoneyLast7Weeks(user):
 
     expense_data = {
         "date": seven_days_ago.strftime("%d/%m/%Y"),
+        "account_balance": formatMoney(float(user.account_balance)),
         "day_now": day_now.strftime("%d/%m/%Y"),
         "category": "Expense Tracker",
         "total": formatMoney(float(total_money_spent)),
@@ -73,5 +74,5 @@ async def sumMoneyLast7Weeks(user):
 
 
 def formatMoney(money):
-    format_money = "{:,.3f}".format(float(money)) + "vnđ"
+    format_money = "{:,.3f}".format(float(money)) + " vnđ"
     return format_money
