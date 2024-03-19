@@ -64,6 +64,7 @@ This is a Python-based Telegram bot that helps users track their spending, incom
 Run the bot:
 
 ```
+python migration.py
 python bot.py
 ```
 
