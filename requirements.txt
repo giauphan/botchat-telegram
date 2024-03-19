@@ -1,4 +1,4 @@
-SQLAlchemy<=2.0.0
+SQLAlchemy<2.0.0
 orm~=0.2
 python-dotenv~=1.0.1
 pytz~=2024.1
