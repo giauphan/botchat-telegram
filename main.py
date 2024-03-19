@@ -10,7 +10,7 @@ from app.feat.Income import getIncomeDetail
 from app.console.sendMailStatistical import sendMailUser
 from app.feat.SaveLog import log, logger
 from app.feat.Chat import statistics, saveChat
-from app.components.keyBoar import buildKeyBoar,showKeyboardSuccess
+from app.components.keyBoar import buildKeyBoar, showKeyboardSuccess
 
 load_dotenv()
 
@@ -210,11 +210,19 @@ async def get_income(message):
             "An error occurred while retrieving your income. Please try again later.",
         )
 
+
 user_choices = {}
-@bot.message_handler(commands=['option'])
+
+
+@bot.message_handler(commands=["option"])
 def send_options(message):
     keyboard = buildKeyBoar()
-    bot.send_message(chat_id=message.chat.id, text="Please select your options:", reply_markup=keyboard)
+    bot.send_message(
+        chat_id=message.chat.id,
+        text="Please select your options:",
+        reply_markup=keyboard,
+    )
+
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_callback(call):
@@ -230,10 +238,14 @@ def handle_callback(call):
         user_choices[user_id].append(choice)
         bot.answer_callback_query(call.id, text=f"Added {choice}")
 
-    keyboard = showKeyboardSuccess(user_id,user_choices)
+    keyboard = showKeyboardSuccess(user_id, user_choices)
     print(user_choices)
 
-    bot.edit_message_reply_markup(chat_id=call.message.chat.id, message_id=call.message.message_id, reply_markup=keyboard)
+    bot.edit_message_reply_markup(
+        chat_id=call.message.chat.id,
+        message_id=call.message.message_id,
+        reply_markup=keyboard,
+    )
 
 
 @bot.message_handler(commands=["set_email"])
