@@ -1,6 +1,6 @@
 from app.feat.user import getInfoUser, getFullName
 from Model.Chat import ChatModel as Chat
-from app.feat.SaveLog import  logger
+from app.feat.SaveLog import logger
 
 
 async def saveChat(message):

@@ -214,10 +214,11 @@ async def get_income(message):
 def handle_callback(call):
     choice = call.data
 
-    if choice == 'task1':
+    if choice == "task1":
         bot.answer_callback_query(text="✅ Task 1")
-    elif choice == 'task2':
-        bot.answer_callback_query(text="✅ Task 2") 
+    elif choice == "task2":
+        bot.answer_callback_query(text="✅ Task 2")
+
 
 @bot.message_handler(commands=["set_email"])
 def set_email(message):
