@@ -210,6 +210,15 @@ async def get_income(message):
         )
 
 
+@bot.callback_query_handler(func=lambda call: True)
+def handle_callback(call):
+    choice = call.data
+
+    if choice == 'task1':
+        bot.answer_callback_query(text="✅ Task 1")
+    elif choice == 'task2':
+        bot.answer_callback_query(text="✅ Task 2") 
+
 @bot.message_handler(commands=["set_email"])
 def set_email(message):
     bot.send_message(message.chat.id, "Hello, please enter your email.")
