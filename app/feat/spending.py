@@ -1,4 +1,3 @@
-from Model.User import UserModel as User
 from Model.Spending import Spending
 from app.feat.user import getInfoUser
 from datetime import timedelta, datetime

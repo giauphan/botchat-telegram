@@ -106,7 +106,7 @@ async def get_spending(message):
         logger.error(f"Error retrieving spending: {e}")
         bot.reply_to(
             message,
-            "An error occurred while retrieving your spending. Please try again later.",
+            "Invalid expense format. Usage: day/month/year.",
         )
 
 

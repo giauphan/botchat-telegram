@@ -1,4 +1,4 @@
-from app.feat.sendEmail import create_email_message, send_email, connect_to_smtp
+from app.feat.sendEmail import create_email_message, send_email
 import asyncio
 from app.feat.user import getAllUser
 from dotenv import load_dotenv
