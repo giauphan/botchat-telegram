@@ -14,7 +14,6 @@ This is a Python-based Telegram bot that helps users track their spending, incom
 # Prerequisites
     Python 3.x
     Telegram bot API token (obtain it from @BotFather)
-    MongoDB (or any other supported database)
 
 ## Installation
 
