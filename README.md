@@ -1,12 +1,20 @@
-# Botchat-telegram
+# Telegram Bot for Personal Finance Management
+This is a Python-based Telegram bot that helps users track their spending, income, and account balance. It provides various commands to record expenses, income, and retrieve financial information.
 
-# Setup
+# Features
+1. Record daily spending with notes
+2. Record daily income with sources
+3. Retrieve spending and income details for a specific date
+4. Set and update user's name and email
+5. Display user's account balance and personal information
+6. Send spending details to the user's email
+7. Track the number of messages sent in a chat
+8. Log chat conversations
 
-## Prerequisites
-
-Before you start, ensure you have the following prerequisites installed on your machine:
-
-- Python 3.x
+# Prerequisites
+    Python 3.x
+    Telegram bot API token (obtain it from @BotFather)
+    MongoDB (or any other supported database)
 
 ## Installation
 
