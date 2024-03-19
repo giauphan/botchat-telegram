@@ -56,25 +56,38 @@ This is a Python-based Telegram bot that helps users track their spending, incom
     pip install -r requirements.txt
     ```
 
+# Set up the environment variables:
+    Create a .env file in the root directory
+    Add your Telegram bot API token: api_token=YOUR_BOT_TOKEN
+    Configure any other necessary environment variables (e.g., database connection)
+# Usage
+Run the bot:
 
-1. **Create a `.env` file in the project root and set the required environment variables. Example:**
+```
+python bot.py
+```
 
-    ```plaintext
-    api_token=
-    BOT_SCRIPT_PATH=
-    
-    Database_name=
-    Database_host=
-    Database_password=
-    Database_username=
-    
-    SMTP_SERVER= "smtp.gmail.com"
-    SMTP_PORT= 587
-    SENDER_EMAIL= ""
-    SMTP_PASSWORD= ""
-    ```
+# In Telegram, start a conversation with your bot and use the available commands:
 
-    Update the URLs based on your specific requirements.
+    /start - Start the bot and receive a welcome message
+    /help - Get a list of available commands
+    /spending - Record daily spending with notes
+    /expense <amount> <category> - Quickly record an expense with a category
+    /get_spending - Retrieve spending details for a specific date
+    /income - Record daily income with sources
+    /get_income - Retrieve income details for a specific date
+    /set_email - Set your email address
+    /set_name - Set your name
+    /show_info - Display your personal information and account balance
+    /statistical - Get the number of messages you've sent in the chat
+    /send_spending - Send your spending details to your registered email
+
+Contributing
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
+
+License
+This project is licensed under the MIT License.
+
 # Fix not create record in table use orm 
     
     ```
