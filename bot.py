@@ -1,50 +1,25 @@
 import telebot
 from dotenv import load_dotenv
-import logging
 import asyncio
 import os
-import sys
-from Model.Chat import ChatModel as Chat
 from Model.Spending import Spending
 from Model.Income import Income
 from app.feat.user import getInfoUser, setUpName, setUpEmail, getFullName, UpdateMoney
 from app.feat.spending import getSpendingDetail, formatMoney
 from app.feat.Income import getIncomeDetail
 from app.console.sendMailStatistical import sendMailUser
+from app.feat.SaveLog import log, logger
+from app.feat.Chat import statistics, saveChat
 
 load_dotenv()
-
-logging.basicConfig(
-    filename="log/bot.log",
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO,
-)
-logger = logging.getLogger(__name__)
 
 bot = telebot.TeleBot(os.getenv("api_token"))
 
 
-async def save_chat(message):
-    try:
-        full_name = getFullName(message.from_user)
-        user = await getInfoUser(full_name)
-        await Chat.objects.create(user_id=user, message=message.text)
-        log(message)
-    except Exception as e:
-        logger.error(f"Error saving chat: {e}")
-
-
 async def send_statistics(message):
     try:
-        full_name = getFullName(message.from_user)
-        user = await getInfoUser(full_name)
-        if user:
-            num_messages = await Chat.objects.filter(user_id=user).count()
-            bot.reply_to(
-                message, f"You have sent {num_messages} messages in this chat."
-            )
-        else:
-            bot.send_message(message.chat.id, "You haven't sent any messages yet.")
+        num_messages = await statistics(message)
+        bot.reply_to(message, f"You have sent {num_messages} messages in this chat.")
     except Exception as e:
         logger.error(f"Error retrieving statistics: {e}")
 
@@ -59,7 +34,7 @@ def send_welcome(message):
 
 @bot.message_handler(commands=["help"])
 def send_welcome(message):
-    reply = f"\t You can control me by sending these commands: \n\n /start - Start bot  \n /statistical - Message statistics \n /spending  -  Give spending in day \n /get_spending - Get spending in day your need \n /send_spending - send email for user \n /set_email - Set email we can email for your  \n /show_info - Check info your"
+    reply = f"\t You can control me by sending these commands: \n\n /start - Start bot  \n /statistical - Message statistics \n /spending  -  Give spending in day \n /expense <amount> <category> - Quick Give spending in day \n /get_spending - Get spending in day your need \n /send_spending - send email for user \n /set_email - Set email we can email for your  \n /show_info - Check info your"
     bot.send_message(message.chat.id, reply)
 
 
@@ -112,7 +87,8 @@ async def save_notes(message, money_spent, user):
 @bot.message_handler(commands=["get_spending"])
 def record_spending(message):
     bot.send_message(
-        message.chat.id, "Hello, what day do you want to check your spending?"
+        message.chat.id,
+        "Hello, what day do you want to check your spending? Date format: day/month/year?",
     )
     bot.register_next_step_handler(message, lambda msg: asyncio.run(get_spending(msg)))
 
@@ -132,6 +108,35 @@ async def get_spending(message):
             message,
             "An error occurred while retrieving your spending. Please try again later.",
         )
+
+
+@bot.message_handler(commands=["expense"])
+def record_quick_expense(message):
+    try:
+        parts = message.text.split(" ", 2)
+        amount = float(parts[1])
+        category = parts[2] if len(parts) > 2 else "Uncategorized"
+
+        full_name = getFullName(message.from_user)
+        user = asyncio.run(getInfoUser(full_name))
+
+        asyncio.run(save_quick_expense(user, amount, category))
+        bot.reply_to(
+            message,
+            f"Expense of {formatMoney(amount)} for {category} has been recorded.",
+        )
+
+    except (IndexError, ValueError):
+        bot.reply_to(
+            message, "Invalid expense format. Usage: /expense <amount> <category>"
+        )
+
+
+async def save_quick_expense(user, amount, category):
+    print(user, amount, category)
+    await Spending.objects.create(user_id=user, money=amount, notes=category)
+    account_balance = user.account_balance - amount
+    await UpdateMoney(user.username, account_balance)
 
 
 @bot.message_handler(commands=["income"])
@@ -255,17 +260,8 @@ def run_statistics(message):
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
-    asyncio.run(save_chat(message))
+    asyncio.run(saveChat(message))
     bot.send_message(message.chat.id, message.text)
-
-
-def log(message):
-    try:
-        logger.info(
-            f"Message from {message.from_user.first_name}: {message.text} {sys.version_info}"
-        )
-    except Exception as e:
-        logger.error(f"Error logging message: {e}")
 
 
 if __name__ == "__main__":
