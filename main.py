@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import asyncio
 import os
 from Model.Spending import Spending
+from Model.Diary import Diary
 from Model.Income import Income
 from app.feat.user import getInfoUser, setUpName, setUpEmail, getFullName, UpdateMoney
 from app.feat.spending import getSpendingDetail, formatMoney
@@ -10,6 +11,7 @@ from app.feat.Income import getIncomeDetail
 from app.console.sendMailStatistical import sendMailUser
 from app.feat.SaveLog import log, logger
 from app.feat.Chat import statistics, saveChat
+from app.feat.Diary import getDiaryDetail
 
 load_dotenv()
 
@@ -133,7 +135,6 @@ def record_quick_expense(message):
 
 
 async def save_quick_expense(user, amount, category):
-    print(user, amount, category)
     await Spending.objects.create(user_id=user, money=amount, notes=category)
     account_balance = user.account_balance - amount
     await UpdateMoney(user.username, account_balance)
@@ -186,7 +187,7 @@ async def save_sources(message, money_spent, user):
 
 
 @bot.message_handler(commands=["get_income"])
-def record_income(message):
+def record_get_income(message):
     bot.send_message(
         message.chat.id, "Hello, what day do you want to check your income?"
     )
@@ -207,6 +208,73 @@ async def get_income(message):
         bot.reply_to(
             message,
             "An error occurred while retrieving your income. Please try again later.",
+        )
+
+
+@bot.message_handler(commands=["diary"])
+def record_diary(message):
+    bot.send_message(
+        message.chat.id,
+        "write diary formart \n your write mood \n your write  main_events \n your write highlights \n your write challenges \n your write gratitude \n your write goals \n",
+    )
+    bot.register_next_step_handler(message, lambda msg: asyncio.run(save_diary(msg)))
+
+
+async def save_diary(message):
+    try:
+        full_name = getFullName(message.from_user)
+        user = await getInfoUser(full_name)
+        parts = message.text.split("\n", 5)
+        mood = parts[0]
+        main_events = parts[1]
+        highlights = parts[2]
+        challenges = parts[3]
+        gratitude = parts[4]
+        goals = parts[5] if len(parts) > 5 else "Uncategorized"
+
+        await Diary.objects.create(
+            user_id=user,
+            mood=mood,
+            main_events=main_events,
+            gratitude=gratitude,
+            highlights=highlights,
+            goals=goals,
+            challenges=challenges,
+        )
+        bot.send_message(
+            message.chat.id,
+            f"{user.name} diary source has been recorded successfully!",
+        )
+    except Exception as e:
+        logger.error(f"Error saving income: {e}")
+        bot.reply_to(
+            message,
+            "An error write diary formart: \n your write mood \n your write  main_events \n your write highlights \n your write challenges \n your write gratitude \n your write goals \n",
+        )
+
+
+@bot.message_handler(commands=["get_diary"])
+def record_get_diary(message):
+    bot.send_message(
+        message.chat.id, "plase write date your find - formart day/month/years"
+    )
+    bot.register_next_step_handler(message, lambda msg: asyncio.run(get_diary(msg)))
+
+
+async def get_diary(message):
+    try:
+        full_name = getFullName(message.from_user)
+        date_str = message.text
+        diary = await getDiaryDetail(full_name, date_str)
+        if diary:
+            bot.reply_to(message, diary)
+        else:
+            bot.send_message(message.chat.id, f"find not found date: {date_str}")
+    except Exception as e:
+        logger.error(f"Error retrieving diary: {e}")
+        bot.reply_to(
+            message,
+            "An error occurred while retrieving your diary. Please try again later.",
         )
 
 

@@ -80,6 +80,23 @@ class Income(orm.Model):
     }
 
 
+class Diary(orm.Model):
+    tablename = "diaries"
+    registry = models
+    fields = {
+        "id": orm.Integer(primary_key=True),
+        "user_id": orm.ForeignKey(User),
+        "mood": orm.String(max_length=50),
+        "main_events": orm.Text(),
+        "highlights": orm.Text(),
+        "challenges": orm.Text(),
+        "gratitude": orm.Text(),
+        "goals": orm.Text(),
+        "created_at": orm.DateTime(default=utc_now),
+        "updated_at": orm.DateTime(default=utc_now),
+    }
+
+
 async def main():
     await models.create_all()
 
