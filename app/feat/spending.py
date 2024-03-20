@@ -4,6 +4,7 @@ from datetime import timedelta, datetime
 from telebot import types
 from statistics import mean
 
+
 async def getSpending(full_name, date_str):
     user = await getInfoUser(full_name)
     spending = await Spending.objects.filter(user_id=user).all()

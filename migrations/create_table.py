@@ -28,7 +28,6 @@ def convert_to_utc(utc_time):
     return utc_time
 
 
-
 class User(orm.Model):
     tablename = "users"
     registry = models
@@ -80,6 +79,7 @@ class Income(orm.Model):
         "updated_at": orm.DateTime(default=utc_now),
     }
 
+
 class Diary(orm.Model):
     tablename = "diaries"
     registry = models
@@ -95,6 +95,7 @@ class Diary(orm.Model):
         "created_at": orm.DateTime(default=utc_now),
         "updated_at": orm.DateTime(default=utc_now),
     }
+
 
 async def main():
     await models.create_all()
