@@ -52,15 +52,17 @@ async def sumMoneyLast7Weeks(user):
     ).all()
 
     data = ""
+    total_money_spent_per_day = []
 
     for day in range(0, 7):
         date = day_now - timedelta(days=day)
         total_day = await getSpending(user.name, date.strftime("%d/%m/%Y"))
         total_day_float = total_day
+        total_money_spent_per_day.append(total_day_float)
         data += f"Day: {date.strftime('%Y-%m-%d')}, Total amount: {formatMoney(float(total_day_float))}\n"
 
     total_money_spent = sum(record.money for record in records)
-    avg_money_spent = mean(record.money for record in records)
+    avg_money_spent = mean(total_money_spent_per_day)
 
     expense_data = {
         "date": seven_days_ago.strftime("%d/%m/%Y"),
