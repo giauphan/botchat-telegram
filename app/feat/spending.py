@@ -2,6 +2,7 @@ from Model.Spending import Spending
 from app.feat.user import getInfoUser
 from datetime import timedelta, datetime
 from telebot import types
+from statistics import mean
 
 
 async def getSpending(full_name, date_str):
@@ -59,6 +60,7 @@ async def sumMoneyLast7Weeks(user):
         data += f"Day: {date.strftime('%Y-%m-%d')}, Total amount: {formatMoney(float(total_day_float))}\n"
 
     total_money_spent = sum(record.money for record in records)
+    avg_money_spent = mean(record.money for record in records)
 
     expense_data = {
         "date": seven_days_ago.strftime("%d/%m/%Y"),
@@ -68,9 +70,10 @@ async def sumMoneyLast7Weeks(user):
         "total": formatMoney(float(total_money_spent)),
         "currency": "Vnđ",
         "total_in_day": data,
+        "avg_money_spent": formatMoney(float(avg_money_spent)),
     }
 
-    return expense_data, data
+    return expense_data
 
 
 def build_date_keyboard():
