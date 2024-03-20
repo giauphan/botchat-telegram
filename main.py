@@ -224,7 +224,7 @@ def send_options(message):
     )
 
 
-@bot.callback_query_handler(func=lambda call: True) 
+@bot.callback_query_handler(func=lambda call: True)
 def handle_callback(call):
     choice = call.data
     user_id = call.from_user.id

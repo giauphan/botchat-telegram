@@ -30,4 +30,3 @@ def showKeyboardSuccess(user_id, user_choices):
         ]
     )
     return keyboard
-
