@@ -213,8 +213,12 @@ async def get_income(message):
 
 @bot.message_handler(commands=["diary"])
 def record_diary(message):
-    bot.send_message(message.chat.id, "write diary formart \n your write mood \n your write  main_events \n your write highlights \n your write challenges \n your write gratitude \n your write goals \n")
+    bot.send_message(
+        message.chat.id,
+        "write diary formart \n your write mood \n your write  main_events \n your write highlights \n your write challenges \n your write gratitude \n your write goals \n",
+    )
     bot.register_next_step_handler(message, lambda msg: asyncio.run(save_diary(msg)))
+
 
 async def save_diary(message):
     try:
@@ -222,14 +226,21 @@ async def save_diary(message):
         user = await getInfoUser(full_name)
         parts = message.text.split("\n", 5)
         mood = parts[0]
-        main_events = (parts[1])
-        highlights = parts[2] 
+        main_events = parts[1]
+        highlights = parts[2]
         challenges = parts[3]
-        gratitude = parts[4] 
+        gratitude = parts[4]
         goals = parts[5] if len(parts) > 5 else "Uncategorized"
 
-        
-        await Diary.objects.create(user_id=user, mood=mood, main_events=main_events,gratitude=gratitude, highlights=highlights,goals=goals, challenges=challenges)
+        await Diary.objects.create(
+            user_id=user,
+            mood=mood,
+            main_events=main_events,
+            gratitude=gratitude,
+            highlights=highlights,
+            goals=goals,
+            challenges=challenges,
+        )
         bot.send_message(
             message.chat.id,
             f"{user.name} diary source has been recorded successfully!",
@@ -241,9 +252,12 @@ async def save_diary(message):
             "An error write diary formart: \n your write mood \n your write  main_events \n your write highlights \n your write challenges \n your write gratitude \n your write goals \n",
         )
 
+
 @bot.message_handler(commands=["get_diary"])
 def record_get_diary(message):
-    bot.send_message(message.chat.id, "plase write date your find - formart day/month/years")
+    bot.send_message(
+        message.chat.id, "plase write date your find - formart day/month/years"
+    )
     bot.register_next_step_handler(message, lambda msg: asyncio.run(get_diary(msg)))
 
 
@@ -262,6 +276,7 @@ async def get_diary(message):
             message,
             "An error occurred while retrieving your diary. Please try again later.",
         )
+
 
 @bot.message_handler(commands=["set_email"])
 def set_email(message):
