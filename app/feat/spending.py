@@ -70,7 +70,6 @@ async def sumMoneyLast7Weeks(user):
         "day_now": day_now.strftime("%d/%m/%Y"),
         "category": "Expense Tracker",
         "total": formatMoney(float(total_money_spent)),
-        "currency": "Vnđ",
         "total_in_day": data,
         "avg_money_spent": formatMoney(float(avg_money_spent)),
     }
@@ -91,5 +90,5 @@ def build_date_keyboard():
 
 
 def formatMoney(money):
-    format_money = "{:,.3f}".format(float(money or 0)) + " vnđ"
+    format_money = "{:,.3f}".format(float(money or 0)) + " Vnđ"
     return format_money
