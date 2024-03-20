@@ -30,7 +30,7 @@ def sendMail():
 def sendMailUser(username):
 
     user = asyncio.run(getInfoUser(username))
-    expense_data, date = asyncio.run(sumMoneyLast7Weeks(user))
+    expense_data = asyncio.run(sumMoneyLast7Weeks(user))
 
     send_to = user.email
     subject, body = email_template(user.name, expense_data)
