@@ -103,9 +103,9 @@ class Issue(orm.Model):
     fields = {
         "id": orm.Integer(primary_key=True),
         "user_id": orm.ForeignKey(User),
-        "title": orm.String(max_length=255,index=True),
+        "title": orm.String(max_length=255, index=True),
         "description": orm.Text(),
-        "completed":orm.Boolean(default=False),
+        "completed": orm.Boolean(default=False),
         "created_at": orm.DateTime(default=utc_now),
         "updated_at": orm.DateTime(default=utc_now),
     }
