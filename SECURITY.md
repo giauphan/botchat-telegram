@@ -6,7 +6,7 @@ Only the latest version of this project is currently being supported with securi
 
 | Version | Supported          |
 | ------- | ------------------ |
-| < 1.0   | :white_check_mark:                |
+| 0.x   | :white_check_mark:                |
 
 ## Reporting a Vulnerability
 
