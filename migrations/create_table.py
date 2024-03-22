@@ -97,6 +97,20 @@ class Diary(orm.Model):
     }
 
 
+class Issue(orm.Model):
+    tablename = "issues"
+    registry = models
+    fields = {
+        "id": orm.Integer(primary_key=True),
+        "user_id": orm.ForeignKey(User),
+        "title": orm.String(max_length=255, index=True),
+        "description": orm.Text(),
+        "completed": orm.Boolean(default=False),
+        "created_at": orm.DateTime(default=utc_now),
+        "updated_at": orm.DateTime(default=utc_now),
+    }
+
+
 async def main():
     await models.create_all()
 
