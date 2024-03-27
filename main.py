@@ -322,14 +322,14 @@ def run_statistics(message):
 @bot.message_handler(commands=["send_spending"])
 def run_statistics(message):
     full_name = getFullName(message.from_user)
-    sendMailUser(full_name,'week')
+    sendMailUser(full_name, "week")
     bot.send_message(message.chat.id, f"we send speding to your email  successfully!")
 
 
 @bot.message_handler(commands=["send_spending_month"])
 def run_statistics(message):
     full_name = getFullName(message.from_user)
-    sendMailUser(full_name,'month')
+    sendMailUser(full_name, "month")
     bot.send_message(message.chat.id, f"we send speding to your email  successfully!")
 
 
