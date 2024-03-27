@@ -80,7 +80,7 @@ async def sumMoneyLast7Weeks(user):
 async def sumMoneyLastMonth(user):
 
     day_now = datetime.now()
-    seven_days_ago = day_now - timedelta(days=7)
+    seven_days_ago = day_now - timedelta(days=30)
 
     records = await Spending.objects.filter(
         created_at__gte=seven_days_ago, user_id=user.id
