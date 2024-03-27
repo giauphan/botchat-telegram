@@ -77,6 +77,40 @@ async def sumMoneyLast7Weeks(user):
     return expense_data
 
 
+async def sumMoneyLastMonth(user):
+
+    day_now = datetime.now()
+    seven_days_ago = day_now - timedelta(days=7)
+
+    records = await Spending.objects.filter(
+        created_at__gte=seven_days_ago, user_id=user.id
+    ).all()
+
+    data = ""
+    total_money_spent_per_day = []
+
+    for day in range(0, 30):
+        date = day_now - timedelta(days=day)
+        total_day = await getSpending(user.name, date.strftime("%d/%m/%Y"))
+        total_day_float = total_day
+        total_money_spent_per_day.append(total_day_float)
+        data += f"Day: {date.strftime('%Y-%m-%d')}, Total amount: {formatMoney(float(total_day_float))}\n"
+
+    total_money_spent = sum(record.money for record in records)
+    avg_money_spent = mean(total_money_spent_per_day)
+
+    expense_data = {
+        "date": seven_days_ago.strftime("%d/%m/%Y"),
+        "account_balance": formatMoney(float(user.account_balance)),
+        "day_now": day_now.strftime("%d/%m/%Y"),
+        "category": "Expense Tracker",
+        "total": formatMoney(float(total_money_spent)),
+        "total_in_day": data,
+        "avg_money_spent": formatMoney(float(avg_money_spent)),
+    }
+
+    return expense_data
+
 def build_date_keyboard():
     keyboard = types.InlineKeyboardMarkup()
     today = datetime.now().date()
