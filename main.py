@@ -8,7 +8,7 @@ from Model.Income import Income
 from app.feat.user import getInfoUser, setUpName, setUpEmail, getFullName, UpdateMoney
 from app.feat.spending import getSpendingDetail, formatMoney
 from app.feat.Income import getIncomeDetail
-from app.console.sendMailStatistical import sendMailUser, sendMailUserMonth
+from app.console.sendMailStatistical import sendMailUser
 from app.feat.SaveLog import log, logger
 from app.feat.Chat import statistics, saveChat
 from app.feat.Diary import getDiaryDetail
@@ -322,14 +322,14 @@ def run_statistics(message):
 @bot.message_handler(commands=["send_spending"])
 def run_statistics(message):
     full_name = getFullName(message.from_user)
-    sendMailUser(full_name)
+    sendMailUser(full_name,'week')
     bot.send_message(message.chat.id, f"we send speding to your email  successfully!")
 
 
 @bot.message_handler(commands=["send_spending_month"])
 def run_statistics(message):
     full_name = getFullName(message.from_user)
-    sendMailUserMonth(full_name)
+    sendMailUser(full_name,'month')
     bot.send_message(message.chat.id, f"we send speding to your email  successfully!")
 
 

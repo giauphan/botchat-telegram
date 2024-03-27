@@ -27,21 +27,10 @@ def sendMail():
         send_email(formMail, send_to)
 
 
-def sendMailUser(username):
+def sendMailUser(username,type):
 
     user = asyncio.run(getInfoUser(username))
-    expense_data = asyncio.run(sumMoneyLast7Weeks(user))
-
-    send_to = user.email
-    subject, body = email_template(user.name, expense_data)
-    formMail = create_email_message(send_to, subject, body)
-    send_email(formMail, send_to)
-
-
-def sendMailUserMonth(username):
-
-    user = asyncio.run(getInfoUser(username))
-    expense_data = asyncio.run(sumMoneyLastMonth(user))
+    expense_data = asyncio.run(sumMoneyLast7Weeks(user)) if type =="week" else asyncio.run(sumMoneyLastMonth(user))
 
     send_to = user.email
     subject, body = email_template(user.name, expense_data)
