@@ -111,6 +111,7 @@ async def sumMoneyLastMonth(user):
 
     return expense_data
 
+
 def build_date_keyboard():
     keyboard = types.InlineKeyboardMarkup()
     today = datetime.now().date()

@@ -3,7 +3,7 @@ import asyncio
 from app.feat.user import getAllUser, getInfoUser
 from dotenv import load_dotenv
 import os
-from app.feat.spending import sumMoneyLast7Weeks,sumMoneyLastMonth
+from app.feat.spending import sumMoneyLast7Weeks, sumMoneyLastMonth
 
 load_dotenv()
 
@@ -36,6 +36,7 @@ def sendMailUser(username):
     subject, body = email_template(user.name, expense_data)
     formMail = create_email_message(send_to, subject, body)
     send_email(formMail, send_to)
+
 
 def sendMailUserMonth(username):
 
